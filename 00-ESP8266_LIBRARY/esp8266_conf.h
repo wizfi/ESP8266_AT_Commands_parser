@@ -103,7 +103,7 @@
  *
  *          You can disable this feature if you know exact network where you will connect to save some memory
  */
-#define ESP8266_USE_APSEARCH                       0
+#define ESP8266_USE_APSEARCH                       1
 
 /**
  * @brief   Sets how many AP stations stack will parse which are received from ESP8266 module

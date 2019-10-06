@@ -43,7 +43,7 @@ int main(void) {
 	TM_DELAY_Init();
 	
 	/* Init debug USART */
-	TM_USART_Init(USART2, TM_USART_PinsPack_1, 921600);
+	TM_USART_Init(USART2, TM_USART_PinsPack_1, 115200);
 	
 	/* Display message */
 	printf("ESP8266 AT commands parser\r\n");
@@ -72,7 +72,7 @@ int main(void) {
 	ESP8266_WaitReady(&ESP8266);
 	
 	/* Connect to wifi and save settings */
-	ESP8266_WifiConnect(&ESP8266, "your SSID", "your password");
+	ESP8266_WifiConnect(&ESP8266, "DLINK-IPv6", "wiznet1206");
 	
 	/* Wait till finish */
 	ESP8266_WaitReady(&ESP8266);
@@ -80,6 +80,20 @@ int main(void) {
 	/* Get connected devices */
 	ESP8266_WifiGetConnected(&ESP8266);
 	
+	#if 1
+	ESP8266_Update(&ESP8266);
+
+	while (ESP8266_StartClientConnection(&ESP8266, "taylor-pc", "192.168.100.13", 5000, NULL));
+
+	while (ESP8266_RequestSendData(&ESP8266, &ESP8266.Connection[ESP8266.StartConnectionSent]));
+	sprintf(ESP8266.Connection[ESP8266.StartConnectionSent].Data,"Test");
+
+	while (1) {		
+		
+		ESP8266_Update(&ESP8266);
+	}
+
+	#else
 	while (1) {
 		/* Update ESP module */
 		ESP8266_Update(&ESP8266);
@@ -87,9 +101,10 @@ int main(void) {
 		/* Check for button */
 		if (TM_DISCO_ButtonOnPressed()) {
 			/* Starting with connection to web */
-			while (ESP8266_StartClientConnection(&ESP8266, "stm32f4_discovery", "stm32f4-discovery.com", 80, NULL));
+			while (ESP8266_StartClientConnection(&ESP8266, "taylor-pc", "192.168.100.13", 5000, NULL));
 		}
 	}
+	#endif
 }
 
 /* 1ms handler */
@@ -179,11 +194,15 @@ void ESP8266_Callback_ClientConnectionError(ESP8266_t* ESP8266, ESP8266_Connecti
 /* Called when data are ready to be sent to server */
 uint16_t ESP8266_Callback_ClientConnectionSendData(ESP8266_t* ESP8266, ESP8266_Connection_t* Connection, char* Buffer, uint16_t max_buffer_size) {
 	/* Format data to sent to server */
+	#if 1
+	sprintf(Buffer, "Hello, from WizFi360\r\n");
+	#else
 	sprintf(Buffer, "GET / HTTP/1.1\r\n");
 	strcat(Buffer, "Host: stm32f4-discovery.com\r\n");
 	strcat(Buffer, "Connection: close\r\n");
 	strcat(Buffer, "\r\n");
-	
+	#endif
+
 	/* Return length of buffer */
 	return strlen(Buffer);
 }
