@@ -77,9 +77,9 @@ int main(void) {
 	
 	/* Connect to wifi and save settings */
 	#if 1
-	WizFi360_WifiConnect(&WizFi360, "DLINK-IPv6", "wiznet1206");
+	WizFi360_WifiConnect(&WizFi360, "YourSSID1", "YourPassword1");
 	#else
-	WizFi360_WifiConnect(&WizFi360, "wizms1", "maker0701");
+	WizFi360_WifiConnect(&WizFi360, "YourSSID2", "YourPassword2");
 	#endif
 	
 	/* Wait till finish */
@@ -95,7 +95,7 @@ int main(void) {
 	while (WizFi360_StartClientConnection(&WizFi360, "taylor-pc", "192.168.100.13", 5000, NULL));
 	#else
 	// becky PC
-	while (WizFi360_StartClientConnection(&WizFi360, "taylor-pc", "192.168.1.65", 5000, NULL));
+	while (WizFi360_StartClientConnection(&WizFi360, "becky-pc", "192.168.1.65", 5000, NULL));
 	#endif
 	sock = WizFi360.StartConnectionSent;
 	WizFi360_WaitReady(&WizFi360);
@@ -107,7 +107,7 @@ int main(void) {
 	#if 0
 	// for UDP
 
-	while (WizFi360_StartUDPConnection(&WizFi360, "taylor-pc", "192.168.1.65", 5000, NULL));
+	while (WizFi360_StartUDPConnection(&WizFi360, "becky-pc", "192.168.1.65", 5000, NULL));
 	sock = WizFi360.StartConnectionSent;
 	WizFi360_WaitReady(&WizFi360);
 	sprintf(Connection->Data,"abcdefghijklmnopqrstuvwxyz\r\n");
