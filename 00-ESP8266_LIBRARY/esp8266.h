@@ -724,6 +724,17 @@ ESP8266_Result_t ESP8266_Ping(ESP8266_t* ESP8266, char* addr);
 ESP8266_Result_t ESP8266_StartClientConnection(ESP8266_t* ESP8266, char* name, char* location, uint16_t port, void* user_parameters);
 
 /**
+ * @brief  Starts new connection as ESP UDP and connects to given address and port
+ * @param  *ESP8266: Pointer to working @ref ESP8266_t structure
+ * @param  *name: Identification connection name for callback functions to detect proper connection
+ * @param  *location: Domain name or IP address to connect to as string
+ * @param  port: Port to connect to
+ * @param  *user_parameters: Pointer to custom user parameters (if needed) which will later be passed to callback functions for UDP connection
+ * @return Member of @ref ESP8266_Result_t enumeration
+ */
+ESP8266_Result_t ESP8266_StartUDPConnection(ESP8266_t* ESP8266, char* name, char* location, uint16_t port, void* user_parameters);
+
+/**
  * @brief  Closes all opened connections
  * @param  *ESP8266: Pointer to working @ref ESP8266_t structure
  * @return Member of @ref ESP8266_Result_t enumeration
@@ -752,6 +763,7 @@ ESP8266_Result_t ESP8266_AllConectionsClosed(ESP8266_t* ESP8266);
  * @return Member of @ref ESP8266_Result_t enumeration
  */
 ESP8266_Result_t ESP8266_RequestSendData(ESP8266_t* ESP8266, ESP8266_Connection_t* Connection);
+
 
 /**
  * @brief  Gets a list of connected station devices to softAP on ESP module

@@ -441,6 +441,7 @@ ESP8266_Result_t ESP8266_Update(ESP8266_t* ESP8266) {
 		(stringlength = BUFFER_ReadString(&USART_Buffer, Received, sizeof(Received))) > 0 /*!< Something in USART buffer */
 	) {		
 		/* Parse received string */
+		printf("Received : %s \r\n", Received);
 		ParseReceived(ESP8266, Received, 1, stringlength);
 	}
 	
@@ -486,13 +487,14 @@ ESP8266_Result_t ESP8266_Update(ESP8266_t* ESP8266) {
 				/* Set connection buffer size */
 				ESP8266->Connection[ESP8266->IPD.ConnNumber].DataSize = ESP8266->IPD.InPtr;
 				ESP8266->Connection[ESP8266->IPD.ConnNumber].LastPart = 0;
-				
+				printf(" receive data : %s\r\n", ESP8266->Connection[ESP8266->IPD.ConnNumber].Data);
 				/* Buffer is full, call user function */
-				if (ESP8266->Connection[ESP8266->IPD.ConnNumber].Client) {
-					ESP8266_Callback_ClientConnectionDataReceived(ESP8266, &ESP8266->Connection[ESP8266->IPD.ConnNumber], ESP8266->Connection[ESP8266->IPD.ConnNumber].Data);
-				} else {
-					ESP8266_Callback_ServerConnectionDataReceived(ESP8266, &ESP8266->Connection[ESP8266->IPD.ConnNumber], ESP8266->Connection[ESP8266->IPD.ConnNumber].Data);
-				}
+//				if (ESP8266->Connection[ESP8266->IPD.ConnNumber].Client) {
+//					ESP8266_Callback_ClientConnectionDataReceived(ESP8266, &ESP8266->Connection[ESP8266->IPD.ConnNumber], ESP8266->Connection[ESP8266->IPD.ConnNumber].Data);
+//				} else {
+//					ESP8266_Callback_ServerConnectionDataReceived(ESP8266, &ESP8266->Connection[ESP8266->IPD.ConnNumber], ESP8266->Connection[ESP8266->IPD.ConnNumber].Data);
+//				}
+				
 				
 				/* Reset input pointer */
 				ESP8266->IPD.InPtr = 0;
@@ -602,7 +604,7 @@ ESP8266_Result_t ESP8266_RequestSendData(ESP8266_t* ESP8266, ESP8266_Connection_
 	
 	/* Format command */
 	sprintf(command, "AT+CIPSENDEX=%d,2048\r\n", Connection->Number);
-	
+
 	/* Send command */
 	if (SendCommand(ESP8266, ESP8266_COMMAND_SEND, command, "AT+CIPSENDEX") != ESP_OK) {
 		return ESP8266->Result;
@@ -618,6 +620,7 @@ ESP8266_Result_t ESP8266_RequestSendData(ESP8266_t* ESP8266, ESP8266_Connection_
 	/* Return from function */
 	return ESP8266->Result;
 }
+
 
 ESP8266_Result_t ESP8266_CloseConnection(ESP8266_t* ESP8266, ESP8266_Connection_t* Connection) {
 	char tmp[30];
@@ -1078,6 +1081,64 @@ ESP8266_Result_t ESP8266_StartClientConnection(ESP8266_t* ESP8266, char* name, c
 	/* Return error */
 	ESP8266_RETURNWITHSTATUS(ESP8266, ESP_ERROR);
 }
+
+
+/******************************************/
+/*               UDP CLIENT               */
+/******************************************/
+ESP8266_Result_t ESP8266_StartUDPConnection(ESP8266_t* ESP8266, char* name, char* location, uint16_t port, void* user_parameters) {
+	int8_t conn = -1;
+	uint8_t i = 0;
+	
+	/* Check if IDLE */
+	ESP8266_CHECK_IDLE(ESP8266);
+	
+	/* Check if connected to network */
+	ESP8266_CHECK_WIFICONNECTED(ESP8266);
+	
+	/* Find available connection */
+	for (i = 0; i < ESP8266_MAX_CONNECTIONS; i++) {
+		if (!ESP8266->Connection[i].Active) {
+			/* Save */
+			conn = i;
+			
+			break;
+		}
+	}
+	
+	/* Try it */
+	if (conn != -1) {
+		char tmp[100];
+		/* Format command */
+		sprintf(tmp, "AT+CIPSTART=%d,\"UDP\",\"%s\",%d\r\n", conn, location, port);
+		
+		/* Send command */
+		if (SendCommand(ESP8266, ESP8266_COMMAND_CIPSTART, tmp, NULL) != ESP_OK) {
+			return ESP8266->Result;
+		}
+		
+		/* We are active now as client */
+		ESP8266->Connection[i].Active = 1;
+		ESP8266->Connection[i].Client = 1;
+		ESP8266->Connection[i].TotalBytesReceived = 0;
+		ESP8266->Connection[i].Number = conn;
+#if ESP8266_USE_SINGLE_CONNECTION_BUFFER == 1
+		ESP8266->Connection[i].Data = ConnectionData;
+#endif
+		ESP8266->StartConnectionSent = i;
+		
+		/* Copy values */
+		strncpy(ESP8266->Connection[i].Name, name, sizeof(ESP8266->Connection[i].Name));
+		ESP8266->Connection[i].UserParameters = user_parameters;
+		
+		/* Return OK */
+		ESP8266_RETURNWITHSTATUS(ESP8266, ESP_OK);
+	}
+	
+	/* Return error */
+	ESP8266_RETURNWITHSTATUS(ESP8266, ESP_ERROR);
+}
+
 
 /******************************************/
 /*              PING SUPPORT              */
@@ -1796,7 +1857,7 @@ static void ParseReceived(ESP8266_t* ESP8266, char* Received, uint8_t from_usart
 			strcmp(Received, "ERROR\r\n") != 0 &&
 			strcmp(Received, "ready\r\n") != 0 &&
 			strcmp(Received, "busy p...\r\n") != 0 &&
-			strncmp(Received, "+IPD:", 4) != 0 &&
+			strncmp(Received, "+IPD", 4) != 0 &&
 			strncmp(Received, ESP8266->ActiveCommandResponse[0], strlen(ESP8266->ActiveCommandResponse[0])) != 0
 		) {
 			/* Save string to temporary buffer, because we received a string which does not belong to this command */
@@ -1872,7 +1933,6 @@ static void ParseReceived(ESP8266_t* ESP8266, char* Received, uint8_t from_usart
 			}
 		}
 	}
-	
 	/* Check if +IPD was received with incoming data */
 	if (strncmp(Received, "+IPD", 4) == 0) {		
 		/* If we are not in IPD mode already */
@@ -1942,7 +2002,6 @@ static void ParseReceived(ESP8266_t* ESP8266, char* Received, uint8_t from_usart
 		
 		/* Copy content to beginning of buffer */
 		memcpy((uint8_t *)ESP8266->Connection[ESP8266->IPD.ConnNumber].Data, (uint8_t *)&Received[ipd_ptr], bufflen - ipd_ptr);
-		
 		/* Check for length */
 		if ((bufflen - ipd_ptr) > ESP8266->Connection[ESP8266->IPD.ConnNumber].BytesReceived) {
 			/* Add zero at the end of string */
@@ -2502,45 +2561,46 @@ static void CallConnectionCallbacks(ESP8266_t* ESP8266) {
 	uint8_t conn_number;
 	
 	/* Check if there are any pending data to be sent to connection */
-	for (conn_number = 0; conn_number < ESP8266_MAX_CONNECTIONS; conn_number++) {
-		if (
-			ESP8266->ActiveCommand == ESP8266_COMMAND_IDLE &&                                            /*!< Must be IDLE, if we are not because callbacks start command, stop execution */
-			ESP8266->Connection[conn_number].Active && ESP8266->Connection[conn_number].CallDataReceived /*!< We must call function for received data */
-		) {
-			/* Clear flag */
-			ESP8266->Connection[conn_number].CallDataReceived = 0;
-			
-			/* Call user function according to connection type */
-			if (ESP8266->Connection[conn_number].Client) {
-				/* Client mode */
-				ESP8266_Callback_ClientConnectionDataReceived(ESP8266, &ESP8266->Connection[conn_number], ESP8266->Connection[conn_number].Data);
-			} else {
-				/* Server mode */
-				ESP8266_Callback_ServerConnectionDataReceived(ESP8266, &ESP8266->Connection[conn_number], ESP8266->Connection[conn_number].Data);
-			}
-		}
-	}
+//	for (conn_number = 0; conn_number < ESP8266_MAX_CONNECTIONS; conn_number++) {
+//		if (
+//			ESP8266->ActiveCommand == ESP8266_COMMAND_IDLE &&                                            /*!< Must be IDLE, if we are not because callbacks start command, stop execution */
+//			ESP8266->Connection[conn_number].Active && ESP8266->Connection[conn_number].CallDataReceived /*!< We must call function for received data */
+//		) {
+//			/* Clear flag */
+//			ESP8266->Connection[conn_number].CallDataReceived = 0;
+//			
+//			
+//			/* Call user function according to connection type */
+//			if (ESP8266->Connection[conn_number].Client) {
+//				/* Client mode */
+//				ESP8266_Callback_ClientConnectionDataReceived(ESP8266, &ESP8266->Connection[conn_number], ESP8266->Connection[conn_number].Data);
+//			} else {
+//				/* Server mode */
+//				ESP8266_Callback_ServerConnectionDataReceived(ESP8266, &ESP8266->Connection[conn_number], ESP8266->Connection[conn_number].Data);
+//			}
+//			
+//		}
+//	}
 }
 
 static void ProcessSendData(ESP8266_t* ESP8266) {
 	uint16_t found;
 	ESP8266_Connection_t* Connection = ESP8266->SendDataConnection;
-	
 	/* Wrapper was found */
 	ESP8266->Flags.F.WaitForWrapper = 0;
 	
 	/* Go to SENDDATA command as active */
 	ESP8266->ActiveCommand = ESP8266_COMMAND_SENDDATA;
 	
-	/* Get data from user */
-	if (Connection->Client) {
-		/* Get data as client */
-		found = ESP8266_Callback_ClientConnectionSendData(ESP8266, Connection, Connection->Data, 2046);
-	} else {
-		/* Get data as server */
-		found = ESP8266_Callback_ServerConnectionSendData(ESP8266, Connection, Connection->Data, 2046);
-	}
-	
+//	/* Get data from user */
+//	if (Connection->Client) {
+//		/* Get data as client */
+//		found = ESP8266_Callback_ClientConnectionSendData(ESP8266, Connection, Connection->Data, 2046);
+//	} else {
+//		/* Get data as server */
+//		found = ESP8266_Callback_ServerConnectionSendData(ESP8266, Connection, Connection->Data, 2046);
+//	}
+	found=strlen(Connection->Data);
 	/* Check for input data */
 	if (found > 2046) {
 		found = 2046;
@@ -2554,7 +2614,6 @@ static void ProcessSendData(ESP8266_t* ESP8266) {
 		/* Increase number of bytes sent */
 		ESP8266->TotalBytesSent += found;
 	}
-		
 	/* Send zero at the end even if data are not valid = stop sending data to module */
 	ESP8266_LL_USARTSend((uint8_t *)"\\0", 2);
 }

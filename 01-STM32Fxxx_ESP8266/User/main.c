@@ -27,6 +27,10 @@
 ESP8266_t ESP8266;
 
 int main(void) {
+	uint8_t sock;
+	char tmp[20];
+	ESP8266_Connection_t* Connection;
+	
 	/* Init system */
 	TM_RCC_InitSystem();
 	
@@ -72,7 +76,7 @@ int main(void) {
 	ESP8266_WaitReady(&ESP8266);
 	
 	/* Connect to wifi and save settings */
-	ESP8266_WifiConnect(&ESP8266, "DLINK-IPv6", "wiznet1206");
+	ESP8266_WifiConnect(&ESP8266, "wizms1", "maker0701");
 	
 	/* Wait till finish */
 	ESP8266_WaitReady(&ESP8266);
@@ -83,13 +87,29 @@ int main(void) {
 	#if 1
 	ESP8266_Update(&ESP8266);
 
-	while (ESP8266_StartClientConnection(&ESP8266, "taylor-pc", "192.168.100.13", 5000, NULL));
+	while (ESP8266_StartClientConnection(&ESP8266, "taylor-pc", "192.168.1.65", 5000, NULL));
+	sock = ESP8266.StartConnectionSent;
+	ESP8266_WaitReady(&ESP8266);
+	
+	sprintf(Connection->Data,"abcdefghijklmnopqrstuvwxyz\r\n");
+	ESP8266_RequestSendData(&ESP8266, Connection);
 
-	while (ESP8266_RequestSendData(&ESP8266, &ESP8266.Connection[ESP8266.StartConnectionSent]));
-	sprintf(ESP8266.Connection[ESP8266.StartConnectionSent].Data,"Test");
+
+// //// for UDP///////////////////////////////////////////////////
+//	while (ESP8266_StartUDPConnection(&ESP8266, "taylor-pc", "192.168.1.65", 5000, NULL));
+//	sock = ESP8266.StartConnectionSent;
+//	ESP8266_WaitReady(&ESP8266);
+//	sprintf(Connection->Data,"abcdefghijklmnopqrstuvwxyz\r\n");
+//	ESP8266_RequestSendData(&ESP8266, Connection);
+
+//	
+//	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	while (1) {		
-		
+		if( ESP8266.Connection[sock].CallDataReceived == 1){
+			ESP8266.Connection[sock].CallDataReceived =0;
+			ESP8266_RequestSendData(&ESP8266, &ESP8266.Connection[sock] );
+		}
 		ESP8266_Update(&ESP8266);
 	}
 
@@ -98,6 +118,11 @@ int main(void) {
 		/* Update ESP module */
 		ESP8266_Update(&ESP8266);
 		
+		if(ESP8266.Connection[sock].TotalBytesReceived>0){
+//			sprintf(ESP8266.Connection[sock].Data,"Test");
+			printf("receive : %s\r\n", &ESP8266.Connection[sock].Data);
+			ESP8266_RequestSendData(&ESP8266, &ESP8266.Connection[sock]);
+		}
 		/* Check for button */
 		if (TM_DISCO_ButtonOnPressed()) {
 			/* Starting with connection to web */
@@ -182,7 +207,7 @@ void ESP8266_Callback_ClientConnectionConnected(ESP8266_t* ESP8266, ESP8266_Conn
 	printf("Client connected to server! Connection number: %s\r\n", Connection->Name);
 	
 	/* We are connected to server, request to sent header data to server */
-	ESP8266_RequestSendData(ESP8266, Connection);
+//	ESP8266_RequestSendData(ESP8266, Connection);
 }
 
 /* Called when client connection fails to server */
@@ -192,20 +217,20 @@ void ESP8266_Callback_ClientConnectionError(ESP8266_t* ESP8266, ESP8266_Connecti
 }
 
 /* Called when data are ready to be sent to server */
-uint16_t ESP8266_Callback_ClientConnectionSendData(ESP8266_t* ESP8266, ESP8266_Connection_t* Connection, char* Buffer, uint16_t max_buffer_size) {
-	/* Format data to sent to server */
-	#if 1
-	sprintf(Buffer, "Hello, from WizFi360\r\n");
-	#else
-	sprintf(Buffer, "GET / HTTP/1.1\r\n");
-	strcat(Buffer, "Host: stm32f4-discovery.com\r\n");
-	strcat(Buffer, "Connection: close\r\n");
-	strcat(Buffer, "\r\n");
-	#endif
+// uint16_t ESP8266_Callback_ClientConnectionSendData(ESP8266_t* ESP8266, ESP8266_Connection_t* Connection, char* Buffer, uint16_t max_buffer_size) {
+// 	/* Format data to sent to server */
+// 	#if 1
+// 	sprintf(Buffer, "Hello, from WizFi360\r\n");
+// 	#else
+// 	sprintf(Buffer, "GET / HTTP/1.1\r\n");
+// 	strcat(Buffer, "Host: stm32f4-discovery.com\r\n");
+// 	strcat(Buffer, "Connection: close\r\n");
+// 	strcat(Buffer, "\r\n");
+// 	#endif
 
-	/* Return length of buffer */
-	return strlen(Buffer);
-}
+// 	/* Return length of buffer */
+// 	return strlen(Buffer);
+// }
 
 /* Called when data are send successfully */
 void ESP8266_Callback_ClientConnectionDataSent(ESP8266_t* ESP8266, ESP8266_Connection_t* Connection) {
