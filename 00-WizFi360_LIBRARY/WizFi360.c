@@ -621,6 +621,21 @@ WizFi360_Result_t WizFi360_RequestSendData(WizFi360_t* WizFi360, WizFi360_Connec
 	return WizFi360->Result;
 }
 
+WizFi360_Result_t WizFi360_Web_SendData(WizFi360_t* WizFi360, WizFi360_Connection_t* Connection) {
+	 char cmd[200];
+	
+	// sent http header to upgrade to the ws protocol
+    sprintf(cmd, "GET %s HTTP/1.1\r\n","/echo?.kl=Y" );
+    sprintf(cmd+strlen(cmd), "Host: %s\r\n","demos.kaazing.com");
+    sprintf(cmd+strlen(cmd), "Upgrade: WebSocket\r\n");
+    sprintf(cmd+strlen(cmd), "Connection: Upgrade\r\n");
+    sprintf(cmd+strlen(cmd), "Sec-WebSocket-Key: L159VM0TWUzyDxwJEIEzjw==\r\n");
+    sprintf(cmd+strlen(cmd), "Sec-WebSocket-Version: 13\r\n\r\n");
+	Connection->Data = cmd;
+	
+	/* Return from function */
+	return WizFi360->Result;
+}
 
 WizFi360_Result_t WizFi360_CloseConnection(WizFi360_t* WizFi360, WizFi360_Connection_t* Connection) {
 	char tmp[30];
@@ -1140,6 +1155,61 @@ WizFi360_Result_t WizFi360_StartUDPConnection(WizFi360_t* WizFi360, char* name, 
 }
 
 
+/******************************************/
+/*               WebSocket               */
+/******************************************/
+WizFi360_Result_t WizFi360_StartWebConnection(WizFi360_t* WizFi360, char* name, char* location, uint16_t port, void* user_parameters) {
+	int8_t conn = -1;
+	uint8_t i = 0;
+	
+	/* Check if IDLE */
+	WizFi360_CHECK_IDLE(WizFi360);
+	
+	/* Check if connected to network */
+	WizFi360_CHECK_WIFICONNECTED(WizFi360);
+	
+	/* Find available connection */
+	for (i = 0; i < WizFi360_MAX_CONNECTIONS; i++) {
+		if (!WizFi360->Connection[i].Active) {
+			/* Save */
+			conn = i;
+			
+			break;
+		}
+	}
+	
+	/* Try it */
+	if (conn != -1) {
+		char tmp[100];
+		/* Format command */
+		sprintf(tmp, "AT+CIPSTART=%d,\"TCP\",\"%s\",%d\r\n", conn, location, port);
+		
+		/* Send command */
+		if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSTART, tmp, NULL) != ESP_OK) {
+			return WizFi360->Result;
+		}
+		
+		/* We are active now as client */
+		WizFi360->Connection[i].Active = 1;
+		WizFi360->Connection[i].Client = 1;
+		WizFi360->Connection[i].TotalBytesReceived = 0;
+		WizFi360->Connection[i].Number = conn;
+#if WizFi360_USE_SINGLE_CONNECTION_BUFFER == 1
+		WizFi360->Connection[i].Data = ConnectionData;
+#endif
+		WizFi360->StartConnectionSent = i;
+		
+		/* Copy values */
+		strncpy(WizFi360->Connection[i].Name, name, sizeof(WizFi360->Connection[i].Name));
+		WizFi360->Connection[i].UserParameters = user_parameters;
+		
+		/* Return OK */
+		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	}
+	
+	/* Return error */
+	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+}
 /******************************************/
 /*              PING SUPPORT              */
 /******************************************/

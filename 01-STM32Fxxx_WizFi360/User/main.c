@@ -77,7 +77,7 @@ int main(void) {
 	
 	/* Connect to wifi and save settings */
 	#if 1
-	WizFi360_WifiConnect(&WizFi360, "YourSSID1", "YourPassword1");
+	WizFi360_WifiConnect(&WizFi360, "Teddy_AP", "12345678");
 	#else
 	WizFi360_WifiConnect(&WizFi360, "YourSSID2", "YourPassword2");
 	#endif
@@ -92,7 +92,7 @@ int main(void) {
 
 	#if 1
 	// taylor PC
-	while (WizFi360_StartClientConnection(&WizFi360, "taylor-pc", "192.168.100.13", 5000, NULL));
+	while (WizFi360_StartClientConnection(&WizFi360, "test", "192.168.100.13", 5000, NULL));
 	#else
 	// becky PC
 	while (WizFi360_StartClientConnection(&WizFi360, "becky-pc", "192.168.1.65", 5000, NULL));
@@ -100,7 +100,9 @@ int main(void) {
 	sock = WizFi360.StartConnectionSent;
 	WizFi360_WaitReady(&WizFi360);
 	
-	sprintf(Connection->Data,"abcdefghijklmnopqrstuvwxyz\r\n");
+
+	//sprintf(Connection->Data,"abcdefghijklmnopqrstuvwxyz\r\n");
+	WizFi360_Web_SendData(&WizFi360, Connection);
 	WizFi360_RequestSendData(&WizFi360, Connection);
 
 

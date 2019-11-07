@@ -763,7 +763,7 @@ WizFi360_Result_t WizFi360_AllConectionsClosed(WizFi360_t* WizFi360);
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_RequestSendData(WizFi360_t* WizFi360, WizFi360_Connection_t* Connection);
-
+WizFi360_Result_t WizFi360_Web_SendData(WizFi360_t* WizFi360, WizFi360_Connection_t* Connection);
 
 /**
  * @brief  Gets a list of connected station devices to softAP on ESP module
