@@ -175,7 +175,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* This settings should not be modified */
-#define WizFi360_MAX_CONNECTIONS        5  /*!< Number of maximum active connections on ESP */
+#define WizFi360_MAX_CONNECTIONS        5  /*!< Number of maximum active connections on WizFi360 */
 #define WizFi360_MAX_CONNECTEDSTATIONS  10 /*!< Number of AP stations saved to received data array */
 
  /* Check for GNUC */
@@ -199,23 +199,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * @brief  WizFi360 library possible return statements on function calls
  */
 typedef enum {
-	ESP_OK = 0x00,          /*!< Everything is OK */
-	ESP_ERROR,              /*!< An error occurred */
-	ESP_DEVICENOTCONNECTED, /*!< Device is not connected to UART */
-	ESP_TIMEOUT,            /*!< Timeout was detected when sending command to ESP module */
-	ESP_LINKNOTVALID,       /*!< Link for connection is not valid */
-	ESP_NOHEAP,             /*!< Heap memory is not available */
-	ESP_WIFINOTCONNECTED,   /*!< Wifi is not connected to network */
-	ESP_BUSY                /*!< Device is busy, new command is not possible */
+	WizFi360_OK = 0x00,          /*!< Everything is OK */
+	WizFi360_ERROR,              /*!< An error occurred */
+	WizFi360_DEVICENOTCONNECTED, /*!< Device is not connected to UART */
+	WizFi360_TIMEOUT,            /*!< Timeout was detected when sending command to WizFi360 module */
+	WizFi360_LINKNOTVALID,       /*!< Link for connection is not valid */
+	WizFi360_NOHEAP,             /*!< Heap memory is not available */
+	WizFi360_WIFINOTCONNECTED,   /*!< Wifi is not connected to network */
+	WizFi360_BUSY                /*!< Device is busy, new command is not possible */
 } WizFi360_Result_t;
 
 /**
  * @brief  WizFi360 modes of operation enumeration
  */
 typedef enum {
-	WizFi360_Mode_STA = 0x01,   /*!< ESP in station mode */
-	WizFi360_Mode_AP = 0x02,    /*!< ESP as software Access Point mode */
-	WizFi360_Mode_STA_AP = 0x03 /*!< ESP in both modes */
+	WizFi360_Mode_STA = 0x01,   /*!< WizFi360 in station mode */
+	WizFi360_Mode_AP = 0x02,    /*!< WizFi360 as software Access Point mode */
+	WizFi360_Mode_STA_AP = 0x03 /*!< WizFi360 in both modes */
 } WizFi360_Mode_t;
 
 /**
@@ -262,7 +262,7 @@ typedef enum {
  * @brief  IPD network data structure
  */
 typedef struct {
-	uint8_t InIPD;        /*!< Set to 1 when ESP is in IPD mode with data */
+	uint8_t InIPD;        /*!< Set to 1 when WizFi360 is in IPD mode with data */
 	uint16_t InPtr;       /*!< Input pointer to save data to buffer */
 	uint16_t PtrTotal;    /*!< Total pointer to count all received data */
 	uint8_t ConnNumber;   /*!< Connection number where IPD is active */
@@ -335,7 +335,7 @@ typedef struct {
 } WizFi360_APs_t;
 
 /**
- * @brief  Structure for connected station to softAP to ESP module
+ * @brief  Structure for connected station to softAP to WizFi360 module
  */
 typedef struct {
 	uint8_t IP[4];  /*!< IP address of connected station */
@@ -354,11 +354,11 @@ typedef struct {
  * @brief  Access point configuration
  */
 typedef struct {
-	char SSID[65];          /*!< Network public name for ESP AP mode */
-	char Pass[65];          /*!< Network password for ESP AP mode */
+	char SSID[65];          /*!< Network public name for WizFi360 AP mode */
+	char Pass[65];          /*!< Network password for WizFi360 AP mode */
 	WizFi360_Ecn_t Ecn;      /*!< Security of Wi-Fi spot. This parameter can be a value of @ref WizFi360_Ecn_t enumeration */
 	uint8_t Channel;        /*!< Channel Wi-Fi is operating at */
-	uint8_t MaxConnections; /*!< Max number of stations that are allowed to connect to ESP AP, between 1 and 4 */
+	uint8_t MaxConnections; /*!< Max number of stations that are allowed to connect to WizFi360 AP, between 1 and 4 */
 	uint8_t Hidden;         /*!< Set to 1 if network is hidden (not broadcast) or zero if noz */
 } WizFi360_APConfig_t;
 
@@ -375,25 +375,25 @@ typedef struct {
  * @brief  Main WizFi360 working structure
  */
 typedef struct {
-	uint32_t Baudrate;                                        /*!< Currently used baudrate for ESP module */
+	uint32_t Baudrate;                                        /*!< Currently used baudrate for WizFi360 module */
 	uint32_t ActiveCommand;                                   /*!< Currently active AT command for module */
 	char ActiveCommandResponse[5][64];                        /*!< List of responses we expect with AT command */
 	uint32_t StartTime;                                       /*!< Time when command was sent */
 	uint32_t Time;                                            /*!< Curent time in milliseconds */
-	uint32_t LastReceivedTime;                                /*!< Time when last string was received from ESP module */
+	uint32_t LastReceivedTime;                                /*!< Time when last string was received from WizFi360 module */
 	uint32_t Timeout;                                         /*!< Timeout in milliseconds for command to return response */
 	WizFi360_Connection_t Connection[WizFi360_MAX_CONNECTIONS]; /*!< Array of connections */
-	uint8_t STAIP[4];                                         /*!< Assigned IP address for station for ESP module */
-	uint8_t STAGateway[4];                                    /*!< Gateway address for station ESP is using */
-	uint8_t STANetmask[4];                                    /*!< Netmask address for station ESP is using */
-	uint8_t STAMAC[6];                                        /*!< MAC address for station of ESP module */
-	uint8_t APIP[4];                                          /*!< Assigned IP address for softAP for ESP module */
-	uint8_t APGateway[4];                                     /*!< Gateway address ESP for softAP is using */
-	uint8_t APNetmask[4];                                     /*!< Netmask address ESP for softAP is using */
-	uint8_t APMAC[6];                                         /*!< MAC address for softAP of ESP module */
+	uint8_t STAIP[4];                                         /*!< Assigned IP address for station for WizFi360 module */
+	uint8_t STAGateway[4];                                    /*!< Gateway address for station WizFi360 is using */
+	uint8_t STANetmask[4];                                    /*!< Netmask address for station WizFi360 is using */
+	uint8_t STAMAC[6];                                        /*!< MAC address for station of WizFi360 module */
+	uint8_t APIP[4];                                          /*!< Assigned IP address for softAP for WizFi360 module */
+	uint8_t APGateway[4];                                     /*!< Gateway address WizFi360 for softAP is using */
+	uint8_t APNetmask[4];                                     /*!< Netmask address WizFi360 for softAP is using */
+	uint8_t APMAC[6];                                         /*!< MAC address for softAP of WizFi360 module */
 	WizFi360_Mode_t SentMode;                                  /*!< AP/STA mode we sent to module. This parameter can be a value of @ref WizFi360_Mode_t enumeration */
 	WizFi360_Mode_t Mode;                                      /*!< AT/STA mode which is currently active. This parameter can be a value of @ref WizFi360_Mode_t enumeration */
-	WizFi360_APConfig_t AP;                                    /*!< Configuration settings for ESP when using as Access point mode */
+	WizFi360_APConfig_t AP;                                    /*!< Configuration settings for WizFi360 when using as Access point mode */
 	WizFi360_IPD_t IPD;                                        /*!< IPD status strucutre. Used when new data are available from module */
 #if WizFi360_USE_PING
 	WizFi360_Ping_t PING;                                      /*!< Pinging structure */
@@ -458,7 +458,7 @@ WizFi360_Result_t WizFi360_DeInit(WizFi360_t* WizFi360);
 WizFi360_Result_t WizFi360_WaitReady(WizFi360_t* WizFi360);
 
 /**
- * @brief  Checks if ESP module can accept new AT command
+ * @brief  Checks if WizFi360 module can accept new AT command
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
@@ -505,9 +505,9 @@ WizFi360_Result_t WizFi360_FirmwareUpdate(WizFi360_t* WizFi360);
 WizFi360_Result_t WizFi360_SetUART(WizFi360_t* WizFi360, uint32_t baudrate);
 
 /**
- * @brief  Sets baudrate for WizFi360 module and stores it to ESP flash for future use
+ * @brief  Sets baudrate for WizFi360 module and stores it to WizFi360 flash for future use
  * @note   Module has some issues on returning OK to this command so I don't recommend UART change
- *             if you really want to change it, use this function and later reconfigure your program to start with changed UART for ESP USART BAUDRATE
+ *             if you really want to change it, use this function and later reconfigure your program to start with changed UART for WizFi360 USART BAUDRATE
  *             
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @param  baudrate: Baudrate to use with module
@@ -526,7 +526,7 @@ WizFi360_Result_t WizFi360_SetSleepMode(WizFi360_t* WizFi360, WizFi360_SleepMode
 /**
  * @brief  Puts WizFi360 to sleep for specific amount of milliseconds
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
- * @param  Milliseconds: Number of milliseconds ESP will be in sleep mode
+ * @param  Milliseconds: Number of milliseconds WizFi360 will be in sleep mode
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_Sleep(WizFi360_t* WizFi360, uint32_t Milliseconds);
@@ -541,7 +541,7 @@ WizFi360_Result_t WizFi360_Sleep(WizFi360_t* WizFi360, uint32_t Milliseconds);
 WizFi360_Result_t WizFi360_WifiConnect(WizFi360_t* WizFi360, char* ssid, char* pass);
 
 /**
- * @brief  Connects to wifi network and saves setting to internal flash of ESP for auto connect to network
+ * @brief  Connects to wifi network and saves setting to internal flash of WizFi360 for auto connect to network
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @param  *ssid: SSID name to connect to
  * @param  *pass: Password for SSID. Set to "" if there is no password required
@@ -579,7 +579,15 @@ WizFi360_Result_t WizFi360_SetMode(WizFi360_t* WizFi360, WizFi360_Mode_t Mode);
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_SetMux(WizFi360_t* WizFi360, uint8_t mux);
+/**
+ * @brief  Sets mode for WizFi360, Data transmode or AT Command mode.
+ * @note   This setting is enabled by default
+ * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
+ * @param  mode: Set to 0 to disable feature or 1 to enable
+ * @return Member of @ref WizFi360_Result_t enumeration
+ */
 
+WizFi360_Result_t WizFi360_SetDataMode(WizFi360_t* WizFi360, uint8_t mode); 
 /**
  * @brief  Sets data info on network data receive from module
  * @note   This setting is enabled by default to get proper working state
@@ -592,7 +600,7 @@ WizFi360_Result_t WizFi360_Setdinfo(WizFi360_t* WizFi360, uint8_t dinfo);
 /**
  * @brief  Enables server mode on WizFi360 module
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
- * @param  port: Port number ESP will be visible on
+ * @param  port: Port number WizFi360 will be visible on
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_ServerEnable(WizFi360_t* WizFi360, uint16_t port);
@@ -605,7 +613,7 @@ WizFi360_Result_t WizFi360_ServerEnable(WizFi360_t* WizFi360, uint16_t port);
 WizFi360_Result_t WizFi360_ServerDisable(WizFi360_t* WizFi360);
 
 /**
- * @brief  Sets server timeout value for connections waiting ESP to respond. This applies for all clients which connects to ESP module
+ * @brief  Sets server timeout value for connections waiting WizFi360 to respond. This applies for all clients which connects to WizFi360 module
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @param  timeout: Timeout value in unit of seconds
  * @return Member of @ref WizFi360_Result_t enumeration
@@ -613,91 +621,91 @@ WizFi360_Result_t WizFi360_ServerDisable(WizFi360_t* WizFi360);
 WizFi360_Result_t WizFi360_SetServerTimeout(WizFi360_t* WizFi360, uint16_t timeout);
 
 /**
- * @brief  Gets current IP of ESP module connected to other wifi network as station
+ * @brief  Gets current IP of WizFi360 module connected to other wifi network as station
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_GetSTAIP(WizFi360_t* WizFi360);
 
 /**
- * @brief  Gets current IP of ESP module connected to other wifi network as station and waits for response from module
+ * @brief  Gets current IP of WizFi360 module connected to other wifi network as station and waits for response from module
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_GetSTAIPBlocking(WizFi360_t* WizFi360);
 
 /**
- * @brief  Gets ESP MAC address when acting like station
+ * @brief  Gets WizFi360 MAC address when acting like station
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_GetSTAMAC(WizFi360_t* WizFi360);
 
 /**
- * @brief  Sets ESP MAC address when acting like station
+ * @brief  Sets WizFi360 MAC address when acting like station
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_SetSTAMAC(WizFi360_t* WizFi360, uint8_t* addr);
 
 /**
- * @brief  Sets ESP MAC address when acting like station and stores value to ESP flash memory
+ * @brief  Sets WizFi360 MAC address when acting like station and stores value to WizFi360 flash memory
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_SetSTAMACDefault(WizFi360_t* WizFi360, uint8_t* addr);
 
 /**
- * @brief  Gets current IP of ESP module acting like softAP
+ * @brief  Gets current IP of WizFi360 module acting like softAP
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_GetAPIP(WizFi360_t* WizFi360);
 
 /**
- * @brief  Gets current IP of ESP module acting like softAP and waits for response from module
+ * @brief  Gets current IP of WizFi360 module acting like softAP and waits for response from module
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_GetAPIPBlocking(WizFi360_t* WizFi360);
 
 /**
- * @brief  Gets ESP MAC address when acting like softAP
+ * @brief  Gets WizFi360 MAC address when acting like softAP
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_GetAPMAC(WizFi360_t* WizFi360);
 
 /**
- * @brief  Sets ESP MAC address when acting like softAP
+ * @brief  Sets WizFi360 MAC address when acting like softAP
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_SetAPMAC(WizFi360_t* WizFi360, uint8_t* addr);
 
 /**
- * @brief  Sets ESP MAC address when acting like softAP and stores value to flash memory
+ * @brief  Sets WizFi360 MAC address when acting like softAP and stores value to flash memory
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_SetAPMACDefault(WizFi360_t* WizFi360, uint8_t* addr);
 
 /**
- * @brief  Lists for all available AP stations ESP can connect to
+ * @brief  Lists for all available AP stations WizFi360 can connect to
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_ListWifiStations(WizFi360_t* WizFi360);
 
 /**
- * @brief  Gets current AP settings of ESP module
+ * @brief  Gets current AP settings of WizFi360 module
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_GetAP(WizFi360_t* WizFi360);
 
 /**
- * @brief  Sets AP config values for ESP module
+ * @brief  Sets AP config values for WizFi360 module
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @param  *WizFi360_Config: Pointer to @ref WizFi360_APConfig_t structure with settings
  * @return Member of @ref WizFi360_Result_t enumeration
@@ -713,7 +721,7 @@ WizFi360_Result_t WizFi360_SetAP(WizFi360_t* WizFi360, WizFi360_APConfig_t* WizF
 WizFi360_Result_t WizFi360_Ping(WizFi360_t* WizFi360, char* addr);
 
 /**
- * @brief  Starts new connection as ESP client and connects to given address and port
+ * @brief  Starts new connection as WizFi360 client and connects to given address and port
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @param  *name: Identification connection name for callback functions to detect proper connection
  * @param  *location: Domain name or IP address to connect to as string
@@ -724,7 +732,7 @@ WizFi360_Result_t WizFi360_Ping(WizFi360_t* WizFi360, char* addr);
 WizFi360_Result_t WizFi360_StartClientConnection(WizFi360_t* WizFi360, char* name, char* location, uint16_t port, void* user_parameters);
 
 /**
- * @brief  Starts new connection as ESP UDP and connects to given address and port
+ * @brief  Starts new connection as WizFi360 UDP and connects to given address and port
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @param  *name: Identification connection name for callback functions to detect proper connection
  * @param  *location: Domain name or IP address to connect to as string
@@ -763,10 +771,10 @@ WizFi360_Result_t WizFi360_AllConectionsClosed(WizFi360_t* WizFi360);
  * @return Member of @ref WizFi360_Result_t enumeration
  */
 WizFi360_Result_t WizFi360_RequestSendData(WizFi360_t* WizFi360, WizFi360_Connection_t* Connection);
-WizFi360_Result_t WizFi360_Web_SendData(WizFi360_t* WizFi360, WizFi360_Connection_t* Connection);
+char* WizFi360_Web_SendData(WizFi360_t* WizFi360);
 
 /**
- * @brief  Gets a list of connected station devices to softAP on ESP module
+ * @brief  Gets a list of connected station devices to softAP on WizFi360 module
  * @note   If function succedded, @ref WizFi360_Callback_ConnectedStationsDetected will be called when data are available
  * @param  *WizFi360: Pointer to working @ref WizFi360_t structure
  * @return Member of @ref WizFi360_Result_t enumeration
@@ -781,6 +789,7 @@ WizFi360_Result_t WizFi360_GetConnectedStations(WizFi360_t* WizFi360);
  * @retval Number of bytes written to buffer
  */
 uint16_t WizFi360_DataReceived(uint8_t* ch, uint16_t count);
+WizFi360_Result_t WizFi360_WebSocket_WaitReady(WizFi360_t* WizFi360,uint8_t* Data);
 
 /**
  * @}
@@ -790,7 +799,7 @@ uint16_t WizFi360_DataReceived(uint8_t* ch, uint16_t count);
  * @defgroup WizFi360_Callback_Functions
  * @brief    Library callback functions
  *           
- *           Callback functions are called from ESP stack to user which should implement it when needs it.
+ *           Callback functions are called from WizFi360 stack to user which should implement it when needs it.
  * @{
  */
  
@@ -943,7 +952,7 @@ void WizFi360_Callback_ServerConnectionDataSentError(WizFi360_t* WizFi360, WizFi
 void WizFi360_Callback_ClientConnectionConnected(WizFi360_t* WizFi360, WizFi360_Connection_t* Connection);
 
 /**
- * @brief  ESP826 returns error when trying to connect to external server as client
+ * @brief  WizFi360 returns error when trying to connect to external server as client
  * @param  *WizFi360: Pointer to working \ref WizFi360_t structure
  * @param  *Connection: Pointer to \ref WizFi360_Connection_t connection
  * @retval None
@@ -952,7 +961,7 @@ void WizFi360_Callback_ClientConnectionConnected(WizFi360_t* WizFi360, WizFi360_
 void WizFi360_Callback_ClientConnectionError(WizFi360_t* WizFi360, WizFi360_Connection_t* Connection);
 
 /**
- * @brief  ESP826 has not return any response in defined amount of time when connection to external server as client
+ * @brief  WizFi360 has not return any response in defined amount of time when connection to external server as client
  * @param  *WizFi360: Pointer to working \ref WizFi360_t structure
  * @param  *Connection: Pointer to \ref WizFi360_Connection_t connection
  * @retval None

@@ -4,7 +4,7 @@
  * Before you start, select your target, on the right of the "Load" button
  *
  * In this example, when you press button on discovery/nucleo board,
- * ESP goes to stm32f4-discovery and reads content of web page.
+ * WizFi360 goes to stm32f4-discovery and reads content of web page.
  *
  * @author    Tilen Majerle
  * @email     tilen@majerle.eu
@@ -22,13 +22,21 @@
 #include "tm_stm32_delay.h"
 #include "tm_stm32_usart.h"
 #include "WizFi360.h"
-
+//#define STM_Basic 
 /* WizFi360 working structure */
 WizFi360_t WizFi360;
-
+WizFi360_Result_t Web_Socket(WizFi360_t* WizFi360,WizFi360_Connection_t* Connection,char *Data,uint8_t SendRecv);
 int main(void) {
 	uint8_t sock;
 	char tmp[20];
+	char cmd[200];
+	int Web_test = 0;
+	uint8_t cnt = 0;
+	int len = 0;
+	char text[2] = {0x81,};
+	char ping[1] = {0x89};
+	char pong[1] = {0x8a};
+	char str[100];
 	WizFi360_Connection_t* Connection;
 	
 	/* Init system */
@@ -52,16 +60,16 @@ int main(void) {
 	/* Display message */
 	printf("WizFi360 AT commands parser\r\n");
 	
-	/* Init ESP module */
-	while (WizFi360_Init(&WizFi360, 115200) != ESP_OK) {
+	/* Init WizFi360 module */
+	while (WizFi360_Init(&WizFi360, 115200) != WizFi360_OK) {
 		printf("Problems with initializing module!\r\n");
 	}
 	
 	/* Set mode to STA+AP */
-	while (WizFi360_SetMode(&WizFi360, WizFi360_Mode_STA_AP) != ESP_OK);
+	while (WizFi360_SetMode(&WizFi360, WizFi360_Mode_STA_AP) != WizFi360_OK);
 	
 	/* Enable server on port 80 */
-	while (WizFi360_ServerEnable(&WizFi360, 80) != ESP_OK);
+	//while (WizFi360_ServerEnable(&WizFi360, 80) != WizFi360_OK);
 	
 	/* Module is connected OK */
 	printf("Initialization finished!\r\n");
@@ -91,21 +99,37 @@ int main(void) {
 	WizFi360_Update(&WizFi360);
 
 	#if 1
-	// taylor PC
-	while (WizFi360_StartClientConnection(&WizFi360, "test", "192.168.100.13", 5000, NULL));
+	// taylor PC //34.209.17.11
+	//while (WizFi360_StartClientConnection(&WizFi360, "test", "34.209.17.111", 80, NULL));
+	while (WizFi360_StartClientConnection(&WizFi360, "test", "174.129.224.73", 80, NULL));
 	#else
 	// becky PC
 	while (WizFi360_StartClientConnection(&WizFi360, "becky-pc", "192.168.1.65", 5000, NULL));
 	#endif
 	sock = WizFi360.StartConnectionSent;
+//	printf("sock = %d\r\n",sock);
 	WizFi360_WaitReady(&WizFi360);
+//	printf("size = %d , %d\r\n",sizeof(Connection->Data),strlen(Connection->Data));
+#if STM_Basic
+	sprintf(Connection->Data,"GET /echo?.kl=Y HTTP/1.1\r\nHost: demos.kaazing.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Version: 13\r\nSec-WebSocket-Key: znNyGzp7yiDV328CeFWCig==\r\nSec-WebSocket-Protocol: x-kaazing-handshake\r\n\r\n");
+
+	//sprintf(Connection->Data,"GET /echo?.kl=Y HTTP/1.1\r\nHost: demos.kaazing.com\r\nUpgrade:WebSocket\r\n\r\n");
+	//char *temp_str =(WizFi360_Web_SendData(&WizFi360));
 	
-
-	//sprintf(Connection->Data,"abcdefghijklmnopqrstuvwxyz\r\n");
-	WizFi360_Web_SendData(&WizFi360, Connection);
+	//Connection->Data = (WizFi360_Web_SendData(&WizFi360));
+//	WizFi360_Web_SendData(&WizFi360);
+	//sprintf(Connection->Data,"%s",WizFi360_Web_SendData(&WizFi360));
 	WizFi360_RequestSendData(&WizFi360, Connection);
+#else
+	//Connection->Data = (WizFi360_Web_SendData(&WizFi360));
+#endif
+	//Connection->Data = temp_str;
+	//Connection->Data[209]=0;
+//	printf("CONNECTION1 = %s\r\n",temp_str);
+//	printf("CONNECTION = %s\r\n",Connection->Data);
 
-
+///	WizFi360_RequestSendData(&WizFi360, Connection);
+   
 	#if 0
 	// for UDP
 
@@ -114,15 +138,91 @@ int main(void) {
 	WizFi360_WaitReady(&WizFi360);
 	sprintf(Connection->Data,"abcdefghijklmnopqrstuvwxyz\r\n");
 	WizFi360_RequestSendData(&WizFi360, Connection);
-	#endif
-
-	while (1) {		
+#endif
+#ifdef STM_Basic
+while (1) {		
 		if( WizFi360.Connection[sock].CallDataReceived == 1){
 			WizFi360.Connection[sock].CallDataReceived =0;
+			printf("?>?>?>\r\n");
 			WizFi360_RequestSendData(&WizFi360, &WizFi360.Connection[sock] );
 		}
 		WizFi360_Update(&WizFi360);
 	}
+
+#else
+	while(1){
+		switch(Web_test){
+			case 0 : 
+				if(cnt == 0){
+					//sprintf(Connection->Data,"GET /echo?.kl=Y HTTP/1.1\r\nHost: demos.kaazing.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Version: 13\r\nSec-WebSocket-Key: znNyGzp7yiDV328CeFWCig==\r\nSec-WebSocket-Protocol: x-kaazing-handshake\r\n\r\n");
+					sprintf(Connection->Data,"GET / HTTP/1.1\r\nHost: echo.websocket.org\r\nConnection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Version: 13\r\nSec-WebSocket-Key: znNyGzp7yiDV328CeFWCig==\r\n\r\n");
+					if(Web_Socket(&WizFi360,Connection,"Socket",0)==0)
+						cnt = 1;
+				}
+				else{	
+					if(Web_Socket(&WizFi360,Connection,"Socket",1)==8){
+							Web_test=1;
+							cnt = 0;
+					}
+				}
+
+			break;
+
+			case 1:
+				
+				if(cnt == 0){
+					strcpy(str,"WizFi360 TEST\r\n");
+					text[1] = strlen(str);
+					memcpy(Connection->Data,text,sizeof(text));
+					sprintf(Connection->Data+2,str);
+				#ifdef DEBUG_WIZFI360
+						printf("data = %s\r\n",Connection->Data);
+				#endif
+					//sprintf(Connection->Data,"0x81 0x86 /0xce 0xb2 0x4d 0xc9 /0xcf 0xb3 0x4c 0xcb 0xc4 0xb2 0x01 0x01 0x01 0x02 0x0a 0x00");
+					 if(Web_Socket(&WizFi360,Connection,"WizFi360 TEST",0)==0)
+						cnt = 1;
+				}
+				else	
+					if(Web_Socket(&WizFi360,Connection,"WizFi360 TEST",1)==1){
+						cnt = 0;			
+					}
+			
+			break;
+
+			break;
+		}
+	
+	//	WizFi360_Update(&WizFi360);
+
+	}
+#endif
+}
+
+WizFi360_Result_t Web_Socket(WizFi360_t* WizFi360,WizFi360_Connection_t* Connection,char *Data,uint8_t SendRecv)
+{
+		uint8_t ret=0;
+		uint8_t sock =0;
+		sock = WizFi360->StartConnectionSent;
+		if(SendRecv == 0){
+		//	printf("1 = %s\r\n",Connection->Data);
+			ret = WizFi360_RequestSendData(WizFi360, Connection);
+			WizFi360_WebSocket_WaitReady(WizFi360,Data);
+		#ifdef DEBUG_WIZFI360
+			printf("ret = %d, data=%s\r\n",ret,Data);
+		#endif
+			return ret; 
+		}
+		else{
+			if( WizFi360->Connection[sock].CallDataReceived == 1){
+				WizFi360->Connection[sock].CallDataReceived =0;
+				//ret = WizFi360_RequestSendData(WizFi360,&WizFi360->Connection[sock]);
+				ret = 8;
+				WizFi360_Update(WizFi360);
+				return ret; 
+			}
+			WizFi360_Update(WizFi360);
+			return ret; 
+		}
 }
 
 /* 1ms handler */

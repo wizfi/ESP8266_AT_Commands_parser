@@ -52,6 +52,7 @@
 #define WizFi360_COMMAND_CWLIF          27
 #define WizFi360_COMMAND_CIPSTATUS      28
 #define WizFi360_COMMAND_SENDDATA       29
+#define WizFi360_COMMAND_CIPMODE	    30
 
 #if WizFi360_USE_PING
 #define WizFi360_COMMAND_PING           18
@@ -64,14 +65,14 @@
 #define WizFi360_DEBUG(x)               printf("%s", x)
 
 /* Maximum number of return data size in one +IPD from WizFi360 module */
-#define ESP8255_MAX_BUFF_SIZE          5842
+#define WizFi360_MAX_BUFF_SIZE          5842
 
 /* Temporary buffer */
 static BUFFER_t TMP_Buffer;
 static BUFFER_t USART_Buffer;
 static uint8_t TMPBuffer[WizFi360_TMPBUFFER_SIZE];
 static uint8_t USARTBuffer[WizFi360_USARTBUFFER_SIZE];
-
+char cmd[250];
 #if WizFi360_USE_APSEARCH
 /* AP list */
 static WizFi360_APs_t WizFi360_APs;
@@ -122,7 +123,7 @@ do {                                                        \
 		(WizFi360)->ActiveCommand != WizFi360_COMMAND_IDLE    \
 	) {                                                     \
 		WizFi360_Update(WizFi360);                            \
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_BUSY);        \
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_BUSY);        \
 	}                                                       \
 } while (0);
 
@@ -132,7 +133,7 @@ do {                                                        \
 	if (                                                    \
 		!(WizFi360)->Flags.F.WifiConnected                   \
 	) {                                                     \
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_WIFINOTCONNECTED); \
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_WIFINOTCONNECTED); \
 	}                                                       \
 } while (0);
 
@@ -143,7 +144,7 @@ do {                                                        \
 	return status;                                          \
 } while (0); 
 
-/* Reset ESP connection */
+/* Reset WizFi360 connection */
 #define WizFi360_RESETCONNECTION(WizFi360, conn)              \
 do {                                                        \
 	(conn)->Active = 0;                                     \
@@ -167,13 +168,13 @@ WizFi360_Result_t WizFi360_Init(WizFi360_t* WizFi360, uint32_t baudrate) {
 	/* Init temporary buffer */
 	if (BUFFER_Init(&TMP_Buffer, WizFi360_TMPBUFFER_SIZE, TMPBuffer)) {
 		/* Return from function */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_NOHEAP);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_NOHEAP);
 	}
 	
 	/* Init USART working */
 	if (BUFFER_Init(&USART_Buffer, WizFi360_USARTBUFFER_SIZE, USARTBuffer)) {
 		/* Return from function */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_NOHEAP);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_NOHEAP);
 	}
 
 	/* Init RESET pin */
@@ -235,7 +236,7 @@ WizFi360_Result_t WizFi360_Init(WizFi360_t* WizFi360, uint32_t baudrate) {
 	/* Check status */
 	if (!WizFi360->Flags.F.LastOperationStatus) {		
 		/* Device is not connected */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_DEVICENOTCONNECTED);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_DEVICENOTCONNECTED);
 	}
 	
 	/* Set allowed timeout to 30sec */
@@ -249,7 +250,7 @@ WizFi360_Result_t WizFi360_Init(WizFi360_t* WizFi360, uint32_t baudrate) {
 	
 	/* Check status */
 	if (!WizFi360->Flags.F.LastOperationStatus) {		
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_DEVICENOTCONNECTED);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_DEVICENOTCONNECTED);
 	}
 	
 	/* Enable echo if not already */
@@ -257,21 +258,23 @@ WizFi360_Result_t WizFi360_Init(WizFi360_t* WizFi360, uint32_t baudrate) {
 	
 	/* Wait till idle */
 	WizFi360_WaitReady(WizFi360);
-	
+	/* Disable Data Transmode */
+	while (WizFi360_SetDataMode(WizFi360, 0) != WizFi360_OK);
 	/* Enable multiple connections */
-	while (WizFi360_SetMux(WizFi360, 1) != ESP_OK);
+	while (WizFi360_SetMux(WizFi360, 1) != WizFi360_OK);
+	
 	
 	/* Enable IP and PORT to be shown on +IPD statement */
-	while (WizFi360_Setdinfo(WizFi360, 1) != ESP_OK);
+	while (WizFi360_Setdinfo(WizFi360, 1) != WizFi360_OK);
 	
 	/* Get station MAC */
-	while (WizFi360_GetSTAMAC(WizFi360) != ESP_OK);
+	while (WizFi360_GetSTAMAC(WizFi360) != WizFi360_OK);
 	
 	/* Get softAP MAC */
-	while (WizFi360_GetAPMAC(WizFi360) != ESP_OK);
+	while (WizFi360_GetAPMAC(WizFi360) != WizFi360_OK);
 	
 	/* Get softAP MAC */
-	while (WizFi360_GetAPIP(WizFi360) != ESP_OK);
+	while (WizFi360_GetAPIP(WizFi360) != WizFi360_OK);
 	
 	/* Return OK */
 	return WizFi360_WaitReady(WizFi360);
@@ -282,29 +285,29 @@ WizFi360_Result_t WizFi360_DeInit(WizFi360_t* WizFi360) {
 	BUFFER_Free(&TMP_Buffer);
 	
 	/* Return OK from function */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 WizFi360_Result_t WizFi360_RestoreDefault(WizFi360_t* WizFi360) {
 	/* Send command */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_RESTORE, "AT+RESTORE\r\n", "ready\r\n") != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_RESTORE, "AT+RESTORE\r\n", "ready\r\n") != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 	
 	/* Little delay */
 	WizFi360_DELAYMS(2);
 	
-	/* Reset USART to default ESP baudrate */
+	/* Reset USART to default WizFi360 baudrate */
 	WizFi360_LL_USARTInit(WizFi360_DEFAULT_BAUDRATE);
 	
-	/* Wait till ready, ESP will send data in default baudrate after reset */
+	/* Wait till ready, WizFi360 will send data in default baudrate after reset */
 	WizFi360_WaitReady(WizFi360);
 	
 	/* Reset USART buffer */
 	BUFFER_Reset(&USART_Buffer);
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 #if WizFi360_USE_FIRMWAREUPDATE
@@ -366,9 +369,14 @@ WizFi360_Result_t WizFi360_Update(WizFi360_t* WizFi360) {
 	uint16_t stringlength;
 	
 	/* If timeout is set to 0 */
+#if 1
 	if (WizFi360->Timeout == 0) {
 		WizFi360->Timeout = 30000;
 	}
+#else
+	WizFi360->Timeout = 5000;
+#endif
+
 	
 	/* Check timeout */
 	if ((WizFi360->Time - WizFi360->StartTime) > WizFi360->Timeout) {
@@ -430,7 +438,7 @@ WizFi360_Result_t WizFi360_Update(WizFi360_t* WizFi360) {
 			WizFi360->Flags.F.LastOperationStatus = 1;
 			
 			/* Return from function */
-			//return ESP_OK;
+			//return WizFi360_OK;
 		}
 	}
 	
@@ -481,7 +489,7 @@ WizFi360_Result_t WizFi360_Update(WizFi360_t* WizFi360) {
 			WizFi360->IPD.InPtr++;
 			WizFi360->IPD.PtrTotal++;
 			
-#if WizFi360_CONNECTION_BUFFER_SIZE < ESP8255_MAX_BUFF_SIZE
+#if WizFi360_CONNECTION_BUFFER_SIZE < WizFi360_MAX_BUFF_SIZE
 			/* Check for pointer */
 			if (WizFi360->IPD.InPtr >= WizFi360_CONNECTION_BUFFER_SIZE && WizFi360->IPD.InPtr != WizFi360->Connection[WizFi360->IPD.ConnNumber].BytesReceived) {
 				/* Set connection buffer size */
@@ -534,7 +542,7 @@ WizFi360_Result_t WizFi360_Update(WizFi360_t* WizFi360) {
 	CallConnectionCallbacks(WizFi360);
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 void WizFi360_TimeUpdate(WizFi360_t* WizFi360, uint32_t time_increase) {
@@ -558,7 +566,30 @@ WizFi360_Result_t WizFi360_WaitReady(WizFi360_t* WizFi360) {
 	} while (WizFi360->ActiveCommand != WizFi360_COMMAND_IDLE);
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
+}
+
+WizFi360_Result_t WizFi360_WebSocket_WaitReady(WizFi360_t* WizFi360,uint8_t* Data) {
+	/* Do job */
+	do {
+		/* Check for wrapper */
+		if (WizFi360->Flags.F.WaitForWrapper) {
+			/* We have found it, stop execution here */
+		//	if (BUFFER_Find(&USART_Buffer, (uint8_t *)"Web Socket",9) >= 0) {
+			if (BUFFER_Find(&USART_Buffer, Data,strlen(Data)) >= 0) {
+				WizFi360->Flags.F.WaitForWrapper = 0;
+				break;
+			}
+			#ifdef DEBUG_WIZFI360
+				printf(".");
+			#endif
+		}
+		/* Update device */
+		WizFi360_Update(WizFi360);
+	} while (WizFi360->ActiveCommand != WizFi360_COMMAND_IDLE);
+	
+	/* Return OK */
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 WizFi360_Result_t WizFi360_IsReady(WizFi360_t* WizFi360) {
@@ -566,7 +597,7 @@ WizFi360_Result_t WizFi360_IsReady(WizFi360_t* WizFi360) {
 	WizFi360_CHECK_IDLE(WizFi360);
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 WizFi360_Result_t WizFi360_SetMode(WizFi360_t* WizFi360, WizFi360_Mode_t Mode) {
@@ -576,7 +607,7 @@ WizFi360_Result_t WizFi360_SetMode(WizFi360_t* WizFi360, WizFi360_Mode_t Mode) {
 	sprintf(command, "AT+CWMODE_CUR=%d\r\n", (uint8_t)Mode);
 	
 	/* Send command */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_CWMODE, command, "AT+CWMODE") != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_CWMODE, command, "AT+CWMODE") != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 	
@@ -589,7 +620,7 @@ WizFi360_Result_t WizFi360_SetMode(WizFi360_t* WizFi360, WizFi360_Mode_t Mode) {
 	/* Check status */
 	if (WizFi360->Mode != Mode) {
 		/* Return error */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 	}
 	
 	/* Now get settings for current AP mode */
@@ -601,12 +632,11 @@ WizFi360_Result_t WizFi360_RequestSendData(WizFi360_t* WizFi360, WizFi360_Connec
 	
 	/* Check idle state */
 	WizFi360_CHECK_IDLE(WizFi360);
-	
 	/* Format command */
-	sprintf(command, "AT+CIPSENDEX=%d,2048\r\n", Connection->Number);
-
+	sprintf(command, "AT+CIPSENDBUF=%d,%d\r\n", Connection->Number,strlen(Connection->Data));
+	//sprintf(command, "AT+CIPSENDBUF=%d,\r\n", Connection->Number);
 	/* Send command */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_SEND, command, "AT+CIPSENDEX") != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_SEND, command, "AT+CIPSENDBUF") != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 	
@@ -621,20 +651,22 @@ WizFi360_Result_t WizFi360_RequestSendData(WizFi360_t* WizFi360, WizFi360_Connec
 	return WizFi360->Result;
 }
 
-WizFi360_Result_t WizFi360_Web_SendData(WizFi360_t* WizFi360, WizFi360_Connection_t* Connection) {
-	 char cmd[200];
-	
+char *WizFi360_Web_SendData(WizFi360_t* WizFi360) {
+
+	char *temp_cmd = cmd;
 	// sent http header to upgrade to the ws protocol
-    sprintf(cmd, "GET %s HTTP/1.1\r\n","/echo?.kl=Y" );
-    sprintf(cmd+strlen(cmd), "Host: %s\r\n","demos.kaazing.com");
-    sprintf(cmd+strlen(cmd), "Upgrade: WebSocket\r\n");
-    sprintf(cmd+strlen(cmd), "Connection: Upgrade\r\n");
-    sprintf(cmd+strlen(cmd), "Sec-WebSocket-Key: L159VM0TWUzyDxwJEIEzjw==\r\n");
-    sprintf(cmd+strlen(cmd), "Sec-WebSocket-Version: 13\r\n\r\n");
-	Connection->Data = cmd;
+    sprintf(temp_cmd, "GET %s HTTP/1.1\r\n","/echo?.kl=Y" );
+    sprintf(temp_cmd+strlen(temp_cmd), "Host: %s\r\n","demos.kaazing.com");
+    sprintf(temp_cmd+strlen(temp_cmd), "Connection: Upgrade\r\n");
+	sprintf(temp_cmd+strlen(temp_cmd), "Upgrade: WebSocket\r\n");
+	sprintf(temp_cmd+strlen(temp_cmd), "Sec-WebSocket-Version: 13\r\n");
+    sprintf(temp_cmd+strlen(temp_cmd), "Sec-WebSocket-Key: znNyGzp7yiDV328CeFWCig==\r\n");
+	sprintf(temp_cmd+strlen(temp_cmd), "Sec-WebSocket-Protocol: x-kaazing-handshake\r\n\r\n");
+	
+	printf("cmd = %s\r\n",temp_cmd);
 	
 	/* Return from function */
-	return WizFi360->Result;
+	return cmd;
 }
 
 WizFi360_Result_t WizFi360_CloseConnection(WizFi360_t* WizFi360, WizFi360_Connection_t* Connection) {
@@ -659,12 +691,12 @@ WizFi360_Result_t WizFi360_AllConectionsClosed(WizFi360_t* WizFi360) {
 	for (i = 0; i < WizFi360_MAX_CONNECTIONS; i++) {
 		/* Check if active */
 		if (WizFi360->Connection[i].Active) {
-			WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+			WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 		}
 	}
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 WizFi360_Result_t WizFi360_SetMux(WizFi360_t* WizFi360, uint8_t mux) {
@@ -674,7 +706,7 @@ WizFi360_Result_t WizFi360_SetMux(WizFi360_t* WizFi360, uint8_t mux) {
 	sprintf(tmp, "AT+CIPMUX=%d\r\n", mux);
 	
 	/* Send command */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPMUX, tmp, "AT+CIPMUX") != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPMUX, tmp, "AT+CIPMUX") != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 	
@@ -684,13 +716,35 @@ WizFi360_Result_t WizFi360_SetMux(WizFi360_t* WizFi360, uint8_t mux) {
 	/* Check last status */
 	if (!WizFi360->Flags.F.LastOperationStatus) {
 		/* Return error */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 	}
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
-
+WizFi360_Result_t WizFi360_SetDataMode(WizFi360_t* WizFi360, uint8_t mode) {
+	char tmp[30];
+	
+	/* Format command */
+	sprintf(tmp, "AT+CIPMODE=%d\r\n", mode);
+	
+	/* Send command */
+	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPMODE, tmp, "AT+CIPMODE") != WizFi360_OK) {
+		return WizFi360->Result;
+	}
+	
+	/* Wait till command end */
+	WizFi360_WaitReady(WizFi360);
+	
+	/* Check last status */
+	if (!WizFi360->Flags.F.LastOperationStatus) {
+		/* Return error */
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
+	}
+	
+	/* Return OK */
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
+}
 WizFi360_Result_t WizFi360_Setdinfo(WizFi360_t* WizFi360, uint8_t info) {
 	char tmp[30];
 	
@@ -698,7 +752,7 @@ WizFi360_Result_t WizFi360_Setdinfo(WizFi360_t* WizFi360, uint8_t info) {
 	sprintf(tmp, "AT+CIPDINFO=%d\r\n", info);
 
 	/* Send command and wait */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPDINFO, tmp, "AT+CIPDINFO") != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPDINFO, tmp, "AT+CIPDINFO") != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 
@@ -708,11 +762,11 @@ WizFi360_Result_t WizFi360_Setdinfo(WizFi360_t* WizFi360, uint8_t info) {
 	/* Check last status */
 	if (!WizFi360->Flags.F.LastOperationStatus) {
 		/* Return error */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 	}
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 WizFi360_Result_t WizFi360_ServerEnable(WizFi360_t* WizFi360, uint16_t port) {
@@ -722,7 +776,7 @@ WizFi360_Result_t WizFi360_ServerEnable(WizFi360_t* WizFi360, uint16_t port) {
 	sprintf(tmp, "AT+CIPSERVER=1,%d\r\n", port);
 
 	/* Send command and wait */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSERVER, tmp, "AT+CIPSERVER") != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSERVER, tmp, "AT+CIPSERVER") != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 
@@ -732,16 +786,16 @@ WizFi360_Result_t WizFi360_ServerEnable(WizFi360_t* WizFi360, uint16_t port) {
 	/* Check last status */
 	if (!WizFi360->Flags.F.LastOperationStatus) {
 		/* Return error */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 	}
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 WizFi360_Result_t WizFi360_ServerDisable(WizFi360_t* WizFi360) {
 	/* Send command and wait */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSERVER, "AT+CIPSERVER=0\r\n", "AT+CIPSERVER") != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSERVER, "AT+CIPSERVER=0\r\n", "AT+CIPSERVER") != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 
@@ -751,11 +805,11 @@ WizFi360_Result_t WizFi360_ServerDisable(WizFi360_t* WizFi360) {
 	/* Check last status */
 	if (!WizFi360->Flags.F.LastOperationStatus) {
 		/* Return error */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 	}
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 WizFi360_Result_t WizFi360_SetServerTimeout(WizFi360_t* WizFi360, uint16_t timeout) {
@@ -765,7 +819,7 @@ WizFi360_Result_t WizFi360_SetServerTimeout(WizFi360_t* WizFi360, uint16_t timeo
 	sprintf(tmp, "AT+CIPSTO=%d\r\n", timeout);
 
 	/* Send command and wait */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSTO, tmp, NULL) != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSTO, tmp, NULL) != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 
@@ -775,11 +829,11 @@ WizFi360_Result_t WizFi360_SetServerTimeout(WizFi360_t* WizFi360, uint16_t timeo
 	/* Check last status */
 	if (!WizFi360->Flags.F.LastOperationStatus) {
 		/* Return error */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 	}
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 WizFi360_Result_t WizFi360_WifiDisconnect(WizFi360_t* WizFi360) {
@@ -824,7 +878,7 @@ WizFi360_Result_t WizFi360_WifiGetConnected(WizFi360_t* WizFi360) {
 
 WizFi360_Result_t WizFi360_GetSTAIPBlocking(WizFi360_t* WizFi360) {
 	/* Send command */
-	if (WizFi360_GetSTAIP(WizFi360) != ESP_OK) {
+	if (WizFi360_GetSTAIP(WizFi360) != WizFi360_OK) {
 	
 	}
 
@@ -832,12 +886,12 @@ WizFi360_Result_t WizFi360_GetSTAIPBlocking(WizFi360_t* WizFi360) {
 	WizFi360_WaitReady(WizFi360);
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 WizFi360_Result_t WizFi360_GetAPIPBlocking(WizFi360_t* WizFi360) {
 	/* Send command */
-	if (WizFi360_GetAPIP(WizFi360) != ESP_OK) {
+	if (WizFi360_GetAPIP(WizFi360) != WizFi360_OK) {
 	
 	}
 
@@ -850,7 +904,7 @@ WizFi360_Result_t WizFi360_GetSTAIP(WizFi360_t* WizFi360) {
 	SendCommand(WizFi360, WizFi360_COMMAND_CIPSTA, "AT+CIPSTA_CUR?\r\n", "+CIPSTA_CUR");
 	
 	/* Check status */
-	if (WizFi360->Result == ESP_OK) {
+	if (WizFi360->Result == WizFi360_OK) {
 		/* Reset flags */
 		WizFi360->Flags.F.STAIPIsSet = 0;
 		WizFi360->Flags.F.STANetmaskIsSet = 0;
@@ -866,7 +920,7 @@ WizFi360_Result_t WizFi360_GetAPIP(WizFi360_t* WizFi360) {
 	SendCommand(WizFi360, WizFi360_COMMAND_CIPAP, "AT+CIPAP_CUR?\r\n", "+CIPAP_CUR");
 	
 	/* Check status */
-	if (WizFi360->Result == ESP_OK) {
+	if (WizFi360->Result == WizFi360_OK) {
 		/* Reset flags */
 		WizFi360->Flags.F.APIPIsSet = 0;
 		WizFi360->Flags.F.APNetmaskIsSet = 0;
@@ -885,7 +939,7 @@ WizFi360_Result_t WizFi360_GetSTAMAC(WizFi360_t* WizFi360) {
 	SendCommand(WizFi360, WizFi360_COMMAND_CIPSTAMAC, "AT+CIPSTAMAC?\r\n", "+CIPSTAMAC");
 	
 	/* Check status */
-	if (WizFi360->Result == ESP_OK) {
+	if (WizFi360->Result == WizFi360_OK) {
 		/* Reset flags */
 		WizFi360->Flags.F.STAMACIsSet = 0;
 	}
@@ -909,7 +963,7 @@ WizFi360_Result_t WizFi360_GetAPMAC(WizFi360_t* WizFi360) {
 	SendCommand(WizFi360, WizFi360_COMMAND_CIPAPMAC, "AT+CIPAPMAC?\r\n", "+CIPAPMAC");
 	
 	/* Check status */
-	if (WizFi360->Result == ESP_OK) {
+	if (WizFi360->Result == WizFi360_OK) {
 		/* Reset flags */
 		WizFi360->Flags.F.APMACIsSet = 0;
 	}
@@ -943,7 +997,7 @@ WizFi360_Result_t WizFi360_ListWifiStations(WizFi360_t* WizFi360) {
 
 WizFi360_Result_t WizFi360_GetAP(WizFi360_t* WizFi360) {
 	/* Send command to read current AP settings */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_CWSAP, "AT+CWSAP?\r\n", "+CWSAP") != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_CWSAP, "AT+CWSAP?\r\n", "+CWSAP") != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 	
@@ -964,7 +1018,7 @@ WizFi360_Result_t WizFi360_SetAP(WizFi360_t* WizFi360, WizFi360_APConfig_t* WizF
 		WizFi360_Config->MaxConnections < 1 || WizFi360_Config->MaxConnections > 4
 	) {
 		/* Error */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 	}
 	
 	/* Escape characters */
@@ -1000,7 +1054,7 @@ WizFi360_Result_t WizFi360_SetAPDefault(WizFi360_t* WizFi360, WizFi360_APConfig_
 		WizFi360_Config->MaxConnections < 1 || WizFi360_Config->MaxConnections > 4
 	) {
 		/* Error */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 	}
 	
 	/* Escape characters */
@@ -1030,7 +1084,7 @@ WizFi360_Result_t WizFi360_GetConnectedStations(WizFi360_t* WizFi360) {
 	sprintf(resp, "%d", WizFi360->APIP[0]);
 	
 	/* Try to send command */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_CWLIF, "AT+CWLIF\r\n", resp) != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_CWLIF, "AT+CWLIF\r\n", resp) != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 	
@@ -1071,7 +1125,7 @@ WizFi360_Result_t WizFi360_StartClientConnection(WizFi360_t* WizFi360, char* nam
 		sprintf(tmp, "AT+CIPSTART=%d,\"TCP\",\"%s\",%d\r\n", conn, location, port);
 		
 		/* Send command */
-		if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSTART, tmp, NULL) != ESP_OK) {
+		if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSTART, tmp, NULL) != WizFi360_OK) {
 			return WizFi360->Result;
 		}
 		
@@ -1089,12 +1143,13 @@ WizFi360_Result_t WizFi360_StartClientConnection(WizFi360_t* WizFi360, char* nam
 		strncpy(WizFi360->Connection[i].Name, name, sizeof(WizFi360->Connection[i].Name));
 		WizFi360->Connection[i].UserParameters = user_parameters;
 		
+		
 		/* Return OK */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 	}
 	
 	/* Return error */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 }
 
 
@@ -1128,7 +1183,7 @@ WizFi360_Result_t WizFi360_StartUDPConnection(WizFi360_t* WizFi360, char* name, 
 		sprintf(tmp, "AT+CIPSTART=%d,\"UDP\",\"%s\",%d\r\n", conn, location, port);
 		
 		/* Send command */
-		if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSTART, tmp, NULL) != ESP_OK) {
+		if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSTART, tmp, NULL) != WizFi360_OK) {
 			return WizFi360->Result;
 		}
 		
@@ -1147,11 +1202,11 @@ WizFi360_Result_t WizFi360_StartUDPConnection(WizFi360_t* WizFi360, char* name, 
 		WizFi360->Connection[i].UserParameters = user_parameters;
 		
 		/* Return OK */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 	}
 	
 	/* Return error */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 }
 
 
@@ -1185,7 +1240,7 @@ WizFi360_Result_t WizFi360_StartWebConnection(WizFi360_t* WizFi360, char* name, 
 		sprintf(tmp, "AT+CIPSTART=%d,\"TCP\",\"%s\",%d\r\n", conn, location, port);
 		
 		/* Send command */
-		if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSTART, tmp, NULL) != ESP_OK) {
+		if (SendCommand(WizFi360, WizFi360_COMMAND_CIPSTART, tmp, NULL) != WizFi360_OK) {
 			return WizFi360->Result;
 		}
 		
@@ -1204,11 +1259,11 @@ WizFi360_Result_t WizFi360_StartWebConnection(WizFi360_t* WizFi360, char* name, 
 		WizFi360->Connection[i].UserParameters = user_parameters;
 		
 		/* Return OK */
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 	}
 	
 	/* Return error */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 }
 /******************************************/
 /*              PING SUPPORT              */
@@ -1233,7 +1288,7 @@ WizFi360_Result_t WizFi360_Ping(WizFi360_t* WizFi360, char* addr) {
 	WizFi360->PING.Success = 0;
 	
 	/* Send command */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_PING, tmp, "+") == ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_PING, tmp, "+") == WizFi360_OK) {
 		/* Call user function */
 		WizFi360_Callback_PingStarted(WizFi360, addr);
 	}
@@ -2315,6 +2370,7 @@ static void ParseReceived(WizFi360_t* WizFi360, char* Received, uint8_t from_usa
 			}
 			break;
 		case WizFi360_COMMAND_CIPMUX:
+		case WizFi360_COMMAND_CIPMODE:
 		case WizFi360_COMMAND_CIPDINFO:
 		case WizFi360_COMMAND_AT:
 		case WizFi360_COMMAND_UART:
@@ -2455,7 +2511,7 @@ static void ParseReceived(WizFi360_t* WizFi360, char* Received, uint8_t from_usa
 		
 		/* Reset active command */
 		/* TODO: Check if OK here */
-		if (WizFi360->ActiveCommand != WizFi360_COMMAND_SEND) {
+		if ((WizFi360->ActiveCommand != WizFi360_COMMAND_SEND)) {
 			/* We are waiting for "> " string */
 			WizFi360->ActiveCommand = WizFi360_COMMAND_IDLE;
 		}
@@ -2479,7 +2535,9 @@ static void ParseReceived(WizFi360_t* WizFi360, char* Received, uint8_t from_usa
 static WizFi360_Result_t SendCommand(WizFi360_t* WizFi360, uint8_t Command, char* CommandStr, char* StartRespond) {
 	/* Check idle mode */
 	WizFi360_CHECK_IDLE(WizFi360);
-	
+	#ifdef DEBUG_WIZFI360
+		printf("check1\r\n");
+	#endif
 	/* Clear buffer */
 	if (Command == WizFi360_COMMAND_UART) {
 		/* Reset USART buffer */
@@ -2498,7 +2556,7 @@ static WizFi360_Result_t SendCommand(WizFi360_t* WizFi360, uint8_t Command, char
 	WizFi360->StartTime = WizFi360->Time;
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 static char* EscapeString(char* str) {
@@ -2558,7 +2616,7 @@ static WizFi360_Result_t SendUARTCommand(WizFi360_t* WizFi360, uint32_t baudrate
 	sprintf(command, "%s=%d,8,1,0,0\r\n", cmd, baudrate);
 	
 	/* Send command */
-	if (SendCommand(WizFi360, WizFi360_COMMAND_UART, command, "AT+UART") != ESP_OK) {
+	if (SendCommand(WizFi360, WizFi360_COMMAND_UART, command, "AT+UART") != WizFi360_OK) {
 		return WizFi360->Result;
 	}
 	
@@ -2567,13 +2625,13 @@ static WizFi360_Result_t SendUARTCommand(WizFi360_t* WizFi360, uint32_t baudrate
 	
 	/* Check for success */
 	if (!WizFi360->Flags.F.LastOperationStatus) {
-		WizFi360_RETURNWITHSTATUS(WizFi360, ESP_ERROR);
+		WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_ERROR);
 	}
 	
 	/* Save baudrate */
 	WizFi360->Baudrate = baudrate;
 	
-	/* Delay a little, wait for all bytes from ESP are received before we delete them from buffer */
+	/* Delay a little, wait for all bytes from WizFi360 are received before we delete them from buffer */
 	WizFi360_DELAYMS(5);
 	
 	/* Set new UART baudrate */
@@ -2589,7 +2647,7 @@ static WizFi360_Result_t SendUARTCommand(WizFi360_t* WizFi360, uint32_t baudrate
 	WizFi360->ActiveCommand = WizFi360_COMMAND_IDLE;
 	
 	/* Return OK */
-	WizFi360_RETURNWITHSTATUS(WizFi360, ESP_OK);
+	WizFi360_RETURNWITHSTATUS(WizFi360, WizFi360_OK);
 }
 
 static WizFi360_Result_t SendMACCommand(WizFi360_t* WizFi360, uint8_t* addr, char* cmd, uint8_t command) {
@@ -2613,7 +2671,7 @@ static WizFi360_Result_t SendMACCommand(WizFi360_t* WizFi360, uint8_t* addr, cha
 		memcpy(command == WizFi360_COMMAND_CIPSTAMAC ? &WizFi360->STAMAC : &WizFi360->APMAC, addr, 6);
 	} else {
 		/* Check status */
-		if (WizFi360->Result == ESP_OK) {
+		if (WizFi360->Result == WizFi360_OK) {
 			/* Reset flags */
 			if (command == WizFi360_COMMAND_CIPSTAMAC) {
 				WizFi360->Flags.F.STAMACIsSet = 0;
@@ -2675,7 +2733,9 @@ static void ProcessSendData(WizFi360_t* WizFi360) {
 	if (found > 2046) {
 		found = 2046;
 	}
-	
+	#ifdef DEBUG_WIZFI360
+		printf("send [%d]%s\r\n", found, (uint8_t *)Connection->Data);
+	#endif
 	/* If data valid */
 	if (found > 0) {
 		/* Send data */
@@ -2685,7 +2745,7 @@ static void ProcessSendData(WizFi360_t* WizFi360) {
 		WizFi360->TotalBytesSent += found;
 	}
 	/* Send zero at the end even if data are not valid = stop sending data to module */
-	WizFi360_LL_USARTSend((uint8_t *)"\\0", 2);
+	//WizFi360_LL_USARTSend((uint8_t *)"\\0", 2);
 }
 
 /* Check if needle exists in haystack memory */

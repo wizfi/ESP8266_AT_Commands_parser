@@ -28,8 +28,8 @@ uint8_t WizFi360_LL_USARTInit(uint32_t baudrate) {
 
 uint8_t WizFi360_LL_USARTSend(uint8_t* data, uint16_t count) {
 	/* Send data via USART */
-	TM_USART_Send(WizFi360_USART, data, count);
 	
+	TM_USART_Send(WizFi360_USART, data, count);
 	/* Return 0 = Successful */
 	return 0;
 }
