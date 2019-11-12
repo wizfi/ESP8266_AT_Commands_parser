@@ -641,65 +641,65 @@ Image Symbol Table
     TM_USART_INT_InsertToBuffer              0x080037dd   Thumb Code    16  tm_stm32_usart.o(.text)
     TM_USART_INT_ClearAllFlags               0x080037ed   Thumb Code   126  tm_stm32_usart.o(.text)
     .text                                    0x080038ec   Section        0  main.o(.text)
-    .text                                    0x08003fa0   Section        0  stm32fxxx_it.o(.text)
-    .text                                    0x08003fc4   Section        0  system_stm32f4xx.o(.text)
-    .text                                    0x080040e4   Section        0  wizfi360.o(.text)
-    CallConnectionCallbacks                  0x080040e5   Thumb Code     2  wizfi360.o(.text)
-    ParseNumber                              0x080040e7   Thumb Code    68  wizfi360.o(.text)
-    Hex2Num                                  0x0800412d   Thumb Code    54  wizfi360.o(.text)
-    CHARISHEXNUM                             0x08004163   Thumb Code    42  wizfi360.o(.text)
-    ParseHexNumber                           0x0800418d   Thumb Code    52  wizfi360.o(.text)
-    ParseMAC                                 0x080041c1   Thumb Code    96  wizfi360.o(.text)
-    ParseIP                                  0x08004221   Thumb Code   112  wizfi360.o(.text)
-    ParseCWLIF                               0x08004291   Thumb Code    86  wizfi360.o(.text)
-    ParseCIPSTA                              0x080042f1   Thumb Code   476  wizfi360.o(.text)
-    ParseCWSAP                               0x080044cf   Thumb Code   442  wizfi360.o(.text)
-    ParseCWLAP                               0x0800468b   Thumb Code   370  wizfi360.o(.text)
-    ParseCWJAP                               0x080047fd   Thumb Code   150  wizfi360.o(.text)
-    ParseReceived                            0x080048df   Thumb Code  3148  wizfi360.o(.text)
-    ProcessSendData                          0x0800552b   Thumb Code    70  wizfi360.o(.text)
-    SendCommand                              0x080058c5   Thumb Code   102  wizfi360.o(.text)
-    SendUARTCommand                          0x08005d4b   Thumb Code   136  wizfi360.o(.text)
-    EscapeString                             0x080062a3   Thumb Code    50  wizfi360.o(.text)
-    SendMACCommand                           0x08006611   Thumb Code   166  wizfi360.o(.text)
-    Delayms                                  0x08006e85   Thumb Code    12  wizfi360.o(.text)
-    .text                                    0x08006ed0   Section        0  buffer.o(.text)
-    .text                                    0x0800721c   Section        0  wizfi360_ll.o(.text)
-    .text                                    0x08007254   Section        0  memcpya.o(.text)
-    .text                                    0x08007278   Section        0  memseta.o(.text)
-    .text                                    0x0800729c   Section        0  strstr.o(.text)
-    .text                                    0x080072c0   Section        0  strncpy.o(.text)
-    .text                                    0x080072d8   Section        0  strlen.o(.text)
-    .text                                    0x080072e6   Section        0  strcmp.o(.text)
-    .text                                    0x08007302   Section        0  memcmp.o(.text)
-    .text                                    0x0800731c   Section        0  strcpy.o(.text)
-    .text                                    0x0800732e   Section        0  strncmp.o(.text)
-    .text                                    0x0800734c   Section        0  strtok.o(.text)
-    .text                                    0x08007390   Section        0  uldiv.o(.text)
-    .text                                    0x080073f4   Section       36  init.o(.text)
-    .text                                    0x08007418   Section        0  llshl.o(.text)
-    .text                                    0x08007436   Section        0  llushr.o(.text)
-    i.__0printf$8                            0x08007458   Section        0  printf8.o(i.__0printf$8)
-    i.__0sprintf$8                           0x08007478   Section        0  printf8.o(i.__0sprintf$8)
-    i.__scatterload_copy                     0x080074a0   Section       14  handlers.o(i.__scatterload_copy)
-    i.__scatterload_null                     0x080074ae   Section        2  handlers.o(i.__scatterload_null)
-    i.__scatterload_zeroinit                 0x080074b0   Section       14  handlers.o(i.__scatterload_zeroinit)
-    i._printf_core                           0x080074c0   Section        0  printf8.o(i._printf_core)
-    _printf_core                             0x080074c1   Thumb Code   996  printf8.o(i._printf_core)
-    i._printf_post_padding                   0x080078d0   Section        0  printf8.o(i._printf_post_padding)
-    _printf_post_padding                     0x080078d1   Thumb Code    36  printf8.o(i._printf_post_padding)
-    i._printf_pre_padding                    0x080078f4   Section        0  printf8.o(i._printf_pre_padding)
-    _printf_pre_padding                      0x080078f5   Thumb Code    46  printf8.o(i._printf_pre_padding)
-    i._sputc                                 0x08007922   Section        0  printf8.o(i._sputc)
-    _sputc                                   0x08007923   Thumb Code    10  printf8.o(i._sputc)
-    i.free                                   0x0800792c   Section        0  malloc.o(i.free)
-    i.malloc                                 0x0800797c   Section        0  malloc.o(i.malloc)
-    .constdata                               0x080079e8   Section        8  stm32f4xx_hal_dma.o(.constdata)
-    flagBitshiftOffset                       0x080079e8   Data           8  stm32f4xx_hal_dma.o(.constdata)
-    .constdata                               0x080079f0   Section       16  stm32f4xx_hal_rcc.o(.constdata)
-    .constdata                               0x08007a00   Section        2  main.o(.constdata)
-    .constdata                               0x08007a02   Section       16  system_stm32f4xx.o(.constdata)
-    .conststring                             0x08007a14   Section      418  main.o(.conststring)
+    .text                                    0x08003f94   Section        0  stm32fxxx_it.o(.text)
+    .text                                    0x08003fb8   Section        0  system_stm32f4xx.o(.text)
+    .text                                    0x080040d8   Section        0  wizfi360.o(.text)
+    CallConnectionCallbacks                  0x080040d9   Thumb Code     2  wizfi360.o(.text)
+    ParseNumber                              0x080040db   Thumb Code    68  wizfi360.o(.text)
+    Hex2Num                                  0x08004121   Thumb Code    54  wizfi360.o(.text)
+    CHARISHEXNUM                             0x08004157   Thumb Code    42  wizfi360.o(.text)
+    ParseHexNumber                           0x08004181   Thumb Code    52  wizfi360.o(.text)
+    ParseMAC                                 0x080041b5   Thumb Code    96  wizfi360.o(.text)
+    ParseIP                                  0x08004215   Thumb Code   112  wizfi360.o(.text)
+    ParseCWLIF                               0x08004285   Thumb Code    86  wizfi360.o(.text)
+    ParseCIPSTA                              0x080042e5   Thumb Code   476  wizfi360.o(.text)
+    ParseCWSAP                               0x080044c3   Thumb Code   442  wizfi360.o(.text)
+    ParseCWLAP                               0x0800467f   Thumb Code   370  wizfi360.o(.text)
+    ParseCWJAP                               0x080047f1   Thumb Code   150  wizfi360.o(.text)
+    ParseReceived                            0x080048d3   Thumb Code  3148  wizfi360.o(.text)
+    ProcessSendData                          0x0800551f   Thumb Code    70  wizfi360.o(.text)
+    SendCommand                              0x080058b9   Thumb Code   102  wizfi360.o(.text)
+    SendUARTCommand                          0x08005d3f   Thumb Code   136  wizfi360.o(.text)
+    EscapeString                             0x08006297   Thumb Code    50  wizfi360.o(.text)
+    SendMACCommand                           0x08006605   Thumb Code   166  wizfi360.o(.text)
+    Delayms                                  0x08006e79   Thumb Code    12  wizfi360.o(.text)
+    .text                                    0x08006ec4   Section        0  buffer.o(.text)
+    .text                                    0x08007210   Section        0  wizfi360_ll.o(.text)
+    .text                                    0x08007248   Section        0  memcpya.o(.text)
+    .text                                    0x0800726c   Section        0  memseta.o(.text)
+    .text                                    0x08007290   Section        0  strstr.o(.text)
+    .text                                    0x080072b4   Section        0  strncpy.o(.text)
+    .text                                    0x080072cc   Section        0  strlen.o(.text)
+    .text                                    0x080072da   Section        0  strcmp.o(.text)
+    .text                                    0x080072f6   Section        0  memcmp.o(.text)
+    .text                                    0x08007310   Section        0  strcpy.o(.text)
+    .text                                    0x08007322   Section        0  strncmp.o(.text)
+    .text                                    0x08007340   Section        0  strtok.o(.text)
+    .text                                    0x08007384   Section        0  uldiv.o(.text)
+    .text                                    0x080073e8   Section       36  init.o(.text)
+    .text                                    0x0800740c   Section        0  llshl.o(.text)
+    .text                                    0x0800742a   Section        0  llushr.o(.text)
+    i.__0printf$8                            0x0800744c   Section        0  printf8.o(i.__0printf$8)
+    i.__0sprintf$8                           0x0800746c   Section        0  printf8.o(i.__0sprintf$8)
+    i.__scatterload_copy                     0x08007494   Section       14  handlers.o(i.__scatterload_copy)
+    i.__scatterload_null                     0x080074a2   Section        2  handlers.o(i.__scatterload_null)
+    i.__scatterload_zeroinit                 0x080074a4   Section       14  handlers.o(i.__scatterload_zeroinit)
+    i._printf_core                           0x080074b4   Section        0  printf8.o(i._printf_core)
+    _printf_core                             0x080074b5   Thumb Code   996  printf8.o(i._printf_core)
+    i._printf_post_padding                   0x080078c4   Section        0  printf8.o(i._printf_post_padding)
+    _printf_post_padding                     0x080078c5   Thumb Code    36  printf8.o(i._printf_post_padding)
+    i._printf_pre_padding                    0x080078e8   Section        0  printf8.o(i._printf_pre_padding)
+    _printf_pre_padding                      0x080078e9   Thumb Code    46  printf8.o(i._printf_pre_padding)
+    i._sputc                                 0x08007916   Section        0  printf8.o(i._sputc)
+    _sputc                                   0x08007917   Thumb Code    10  printf8.o(i._sputc)
+    i.free                                   0x08007920   Section        0  malloc.o(i.free)
+    i.malloc                                 0x08007970   Section        0  malloc.o(i.malloc)
+    .constdata                               0x080079dc   Section        8  stm32f4xx_hal_dma.o(.constdata)
+    flagBitshiftOffset                       0x080079dc   Data           8  stm32f4xx_hal_dma.o(.constdata)
+    .constdata                               0x080079e4   Section       16  stm32f4xx_hal_rcc.o(.constdata)
+    .constdata                               0x080079f4   Section        2  main.o(.constdata)
+    .constdata                               0x080079f6   Section       16  system_stm32f4xx.o(.constdata)
+    .conststring                             0x08007a08   Section      418  main.o(.conststring)
     .data                                    0x20000000   Section        4  stm32f4xx_hal.o(.data)
     uwTick                                   0x20000000   Data           4  stm32f4xx_hal.o(.data)
     .data                                    0x20000004   Section        8  tm_stm32_delay.o(.data)
@@ -1029,137 +1029,137 @@ Image Symbol Table
     WizFi360_Callback_ClientConnectionDataReceived 0x08003bf1   Thumb Code    50  main.o(.text)
     WizFi360_Callback_ClientConnectionClosed 0x08003c23   Thumb Code    54  main.o(.text)
     WizFi360_Callback_ClientConnectionTimeout 0x08003c59   Thumb Code    16  main.o(.text)
-    NMI_Handler                              0x08003fa1   Thumb Code     2  stm32fxxx_it.o(.text)
-    HardFault_Handler                        0x08003fa3   Thumb Code     4  stm32fxxx_it.o(.text)
-    MemManage_Handler                        0x08003fa7   Thumb Code     4  stm32fxxx_it.o(.text)
-    BusFault_Handler                         0x08003fab   Thumb Code     4  stm32fxxx_it.o(.text)
-    UsageFault_Handler                       0x08003faf   Thumb Code     4  stm32fxxx_it.o(.text)
-    SVC_Handler                              0x08003fb3   Thumb Code     2  stm32fxxx_it.o(.text)
-    DebugMon_Handler                         0x08003fb5   Thumb Code     2  stm32fxxx_it.o(.text)
-    PendSV_Handler                           0x08003fb7   Thumb Code     2  stm32fxxx_it.o(.text)
-    TimingDelay_Decrement                    0x08003fb9   Thumb Code     2  stm32fxxx_it.o(.text)
-    SysTick_Handler                          0x08003fbb   Thumb Code     8  stm32fxxx_it.o(.text)
-    SystemInit                               0x08003fc5   Thumb Code    82  system_stm32f4xx.o(.text)
-    SystemCoreClockUpdate                    0x08004017   Thumb Code   174  system_stm32f4xx.o(.text)
-    WizFi360_Callback_ConnectedStationsDetected 0x0800412b   Thumb Code     2  wizfi360.o(.text)
-    WizFi360_Callback_FirmwareUpdateError    0x080042e7   Thumb Code     2  wizfi360.o(.text)
-    WizFi360_Callback_FirmwareUpdateSuccess  0x080042e9   Thumb Code     2  wizfi360.o(.text)
-    WizFi360_Callback_FirmwareUpdateStatus   0x080042eb   Thumb Code     2  wizfi360.o(.text)
-    WizFi360_Callback_PingFinished           0x080042ed   Thumb Code     2  wizfi360.o(.text)
-    WizFi360_Callback_ServerConnectionClosed 0x08004895   Thumb Code     2  wizfi360.o(.text)
-    mem_mem                                  0x08004899   Thumb Code    52  wizfi360.o(.text)
-    WizFi360_Callback_ServerConnectionActive 0x080048cd   Thumb Code     2  wizfi360.o(.text)
-    WizFi360_Callback_ServerConnectionDataSent 0x080048d1   Thumb Code     2  wizfi360.o(.text)
-    WizFi360_Update                          0x08005573   Thumb Code   776  wizfi360.o(.text)
-    WizFi360_WaitReady                       0x0800587b   Thumb Code    74  wizfi360.o(.text)
-    WizFi360_GetAPIP                         0x0800592b   Thumb Code    60  wizfi360.o(.text)
-    WizFi360_GetAPMAC                        0x08005967   Thumb Code    42  wizfi360.o(.text)
-    WizFi360_GetSTAMAC                       0x08005991   Thumb Code    42  wizfi360.o(.text)
-    WizFi360_Setdinfo                        0x080059bb   Thumb Code   230  wizfi360.o(.text)
-    WizFi360_SetMux                          0x08005aa1   Thumb Code    80  wizfi360.o(.text)
-    WizFi360_SetDataMode                     0x08005af1   Thumb Code    80  wizfi360.o(.text)
-    WizFi360_Init                            0x08005b41   Thumb Code   394  wizfi360.o(.text)
-    WizFi360_DeInit                          0x08005ccb   Thumb Code    20  wizfi360.o(.text)
-    WizFi360_RestoreDefault                  0x08005cdf   Thumb Code    62  wizfi360.o(.text)
-    WizFi360_FirmwareUpdate                  0x08005d1d   Thumb Code    46  wizfi360.o(.text)
-    WizFi360_SetUART                         0x08005dd3   Thumb Code    18  wizfi360.o(.text)
-    WizFi360_SetUARTDefault                  0x08005de5   Thumb Code    18  wizfi360.o(.text)
-    WizFi360_SetSleepMode                    0x08005df7   Thumb Code    64  wizfi360.o(.text)
-    WizFi360_Sleep                           0x08005e37   Thumb Code    64  wizfi360.o(.text)
-    WizFi360_TimeUpdate                      0x08005e77   Thumb Code   254  wizfi360.o(.text)
-    WizFi360_WebSocket_WaitReady             0x08005f75   Thumb Code    84  wizfi360.o(.text)
-    WizFi360_IsReady                         0x08005fc9   Thumb Code    40  wizfi360.o(.text)
-    WizFi360_GetAP                           0x08005ff1   Thumb Code    34  wizfi360.o(.text)
-    WizFi360_SetMode                         0x08006013   Thumb Code    76  wizfi360.o(.text)
-    WizFi360_RequestSendData                 0x0800605f   Thumb Code   106  wizfi360.o(.text)
-    WizFi360_Web_SendData                    0x080060c9   Thumb Code   126  wizfi360.o(.text)
-    WizFi360_CloseConnection                 0x08006147   Thumb Code    34  wizfi360.o(.text)
-    WizFi360_CloseAllConnections             0x08006169   Thumb Code    18  wizfi360.o(.text)
-    WizFi360_AllConectionsClosed             0x0800617b   Thumb Code    54  wizfi360.o(.text)
-    WizFi360_ServerEnable                    0x080061b1   Thumb Code    80  wizfi360.o(.text)
-    WizFi360_ServerDisable                   0x08006201   Thumb Code    64  wizfi360.o(.text)
-    WizFi360_SetServerTimeout                0x08006241   Thumb Code    80  wizfi360.o(.text)
-    WizFi360_WifiDisconnect                  0x08006291   Thumb Code    18  wizfi360.o(.text)
-    WizFi360_WifiConnect                     0x080062d5   Thumb Code    72  wizfi360.o(.text)
-    WizFi360_WifiConnectDefault              0x0800631d   Thumb Code    72  wizfi360.o(.text)
-    WizFi360_WifiGetConnected                0x08006365   Thumb Code   580  wizfi360.o(.text)
-    WizFi360_GetSTAIP                        0x080065a9   Thumb Code    60  wizfi360.o(.text)
-    WizFi360_GetSTAIPBlocking                0x080065e5   Thumb Code    26  wizfi360.o(.text)
-    WizFi360_GetAPIPBlocking                 0x080065ff   Thumb Code    18  wizfi360.o(.text)
-    WizFi360_SetSTAMAC                       0x080066b7   Thumb Code    20  wizfi360.o(.text)
-    WizFi360_SetSTAMACDefault                0x080066cb   Thumb Code    20  wizfi360.o(.text)
-    WizFi360_SetAPMAC                        0x080066df   Thumb Code    20  wizfi360.o(.text)
-    WizFi360_SetAPMACDefault                 0x080066f3   Thumb Code    20  wizfi360.o(.text)
-    WizFi360_ListWifiStations                0x08006707   Thumb Code    26  wizfi360.o(.text)
-    WizFi360_SetAP                           0x08006721   Thumb Code   170  wizfi360.o(.text)
-    WizFi360_SetAPDefault                    0x080067cb   Thumb Code   170  wizfi360.o(.text)
-    WizFi360_GetConnectedStations            0x08006875   Thumb Code    48  wizfi360.o(.text)
-    WizFi360_StartClientConnection           0x080068a5   Thumb Code   638  wizfi360.o(.text)
-    WizFi360_StartUDPConnection              0x08006b23   Thumb Code   326  wizfi360.o(.text)
-    WizFi360_StartWebConnection              0x08006c69   Thumb Code   328  wizfi360.o(.text)
-    WizFi360_Callback_PingStarted            0x08006db1   Thumb Code     2  wizfi360.o(.text)
-    WizFi360_Ping                            0x08006db3   Thumb Code   114  wizfi360.o(.text)
-    WizFi360_DataReceived                    0x08006e25   Thumb Code    18  wizfi360.o(.text)
-    WizFi360_Callback_ServerConnectionDataReceived 0x08006e39   Thumb Code     2  wizfi360.o(.text)
-    WizFi360_Callback_ServerConnectionSendData 0x08006e3b   Thumb Code     8  wizfi360.o(.text)
-    WizFi360_Callback_ServerConnectionDataSentError 0x08006e43   Thumb Code     2  wizfi360.o(.text)
-    WizFi360_Callback_ClientConnectionSendData 0x08006e45   Thumb Code     8  wizfi360.o(.text)
-    ReverseEscapeString                      0x08006e51   Thumb Code    52  wizfi360.o(.text)
-    BUFFER_Init                              0x08006ed1   Thumb Code    68  buffer.o(.text)
-    BUFFER_Free                              0x08006f15   Thumb Code    32  buffer.o(.text)
-    BUFFER_Write                             0x08006f35   Thumb Code    98  buffer.o(.text)
-    BUFFER_Read                              0x08006f97   Thumb Code    82  buffer.o(.text)
-    BUFFER_GetFree                           0x08006fe9   Thumb Code    42  buffer.o(.text)
-    BUFFER_GetFull                           0x08007013   Thumb Code    40  buffer.o(.text)
-    BUFFER_Reset                             0x0800703b   Thumb Code    14  buffer.o(.text)
-    BUFFER_FindElement                       0x08007049   Thumb Code    82  buffer.o(.text)
-    BUFFER_Find                              0x0800709b   Thumb Code   162  buffer.o(.text)
-    BUFFER_WriteString                       0x0800713d   Thumb Code    26  buffer.o(.text)
-    BUFFER_ReadString                        0x08007157   Thumb Code   132  buffer.o(.text)
-    BUFFER_CheckElement                      0x080071db   Thumb Code    64  buffer.o(.text)
-    WizFi360_LL_USARTInit                    0x0800721d   Thumb Code    18  wizfi360_ll.o(.text)
-    WizFi360_LL_USARTSend                    0x0800722f   Thumb Code    20  wizfi360_ll.o(.text)
-    TM_USART1_ReceiveHandler                 0x08007243   Thumb Code    12  wizfi360_ll.o(.text)
-    __aeabi_memcpy                           0x08007255   Thumb Code    36  memcpya.o(.text)
-    __aeabi_memcpy4                          0x08007255   Thumb Code     0  memcpya.o(.text)
-    __aeabi_memcpy8                          0x08007255   Thumb Code     0  memcpya.o(.text)
-    __aeabi_memset                           0x08007279   Thumb Code    14  memseta.o(.text)
-    __aeabi_memset4                          0x08007279   Thumb Code     0  memseta.o(.text)
-    __aeabi_memset8                          0x08007279   Thumb Code     0  memseta.o(.text)
-    __aeabi_memclr                           0x08007287   Thumb Code     4  memseta.o(.text)
-    __aeabi_memclr4                          0x08007287   Thumb Code     0  memseta.o(.text)
-    __aeabi_memclr8                          0x08007287   Thumb Code     0  memseta.o(.text)
-    _memset$wrapper                          0x0800728b   Thumb Code    18  memseta.o(.text)
-    strstr                                   0x0800729d   Thumb Code    36  strstr.o(.text)
-    strncpy                                  0x080072c1   Thumb Code    24  strncpy.o(.text)
-    strlen                                   0x080072d9   Thumb Code    14  strlen.o(.text)
-    strcmp                                   0x080072e7   Thumb Code    28  strcmp.o(.text)
-    memcmp                                   0x08007303   Thumb Code    26  memcmp.o(.text)
-    strcpy                                   0x0800731d   Thumb Code    18  strcpy.o(.text)
-    strncmp                                  0x0800732f   Thumb Code    30  strncmp.o(.text)
-    strtok                                   0x0800734d   Thumb Code    62  strtok.o(.text)
-    __aeabi_uldivmod                         0x08007391   Thumb Code    98  uldiv.o(.text)
-    __scatterload                            0x080073f5   Thumb Code    28  init.o(.text)
-    __scatterload_rt2                        0x080073f5   Thumb Code     0  init.o(.text)
-    __aeabi_llsl                             0x08007419   Thumb Code    30  llshl.o(.text)
-    _ll_shift_l                              0x08007419   Thumb Code     0  llshl.o(.text)
-    __aeabi_llsr                             0x08007437   Thumb Code    32  llushr.o(.text)
-    _ll_ushift_r                             0x08007437   Thumb Code     0  llushr.o(.text)
-    __0printf$8                              0x08007459   Thumb Code    22  printf8.o(i.__0printf$8)
-    __1printf$8                              0x08007459   Thumb Code     0  printf8.o(i.__0printf$8)
-    __2printf                                0x08007459   Thumb Code     0  printf8.o(i.__0printf$8)
-    __0sprintf$8                             0x08007479   Thumb Code    34  printf8.o(i.__0sprintf$8)
-    __1sprintf$8                             0x08007479   Thumb Code     0  printf8.o(i.__0sprintf$8)
-    __2sprintf                               0x08007479   Thumb Code     0  printf8.o(i.__0sprintf$8)
-    __scatterload_copy                       0x080074a1   Thumb Code    14  handlers.o(i.__scatterload_copy)
-    __scatterload_null                       0x080074af   Thumb Code     2  handlers.o(i.__scatterload_null)
-    __scatterload_zeroinit                   0x080074b1   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
-    free                                     0x0800792d   Thumb Code    76  malloc.o(i.free)
-    malloc                                   0x0800797d   Thumb Code    92  malloc.o(i.malloc)
-    APBAHBPrescTable                         0x080079f0   Data          16  stm32f4xx_hal_rcc.o(.constdata)
-    AHBPrescTable                            0x08007a02   Data          16  system_stm32f4xx.o(.constdata)
-    Region$$Table$$Base                      0x08007bb8   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08007bd8   Number         0  anon$$obj.o(Region$$Table)
+    NMI_Handler                              0x08003f95   Thumb Code     2  stm32fxxx_it.o(.text)
+    HardFault_Handler                        0x08003f97   Thumb Code     4  stm32fxxx_it.o(.text)
+    MemManage_Handler                        0x08003f9b   Thumb Code     4  stm32fxxx_it.o(.text)
+    BusFault_Handler                         0x08003f9f   Thumb Code     4  stm32fxxx_it.o(.text)
+    UsageFault_Handler                       0x08003fa3   Thumb Code     4  stm32fxxx_it.o(.text)
+    SVC_Handler                              0x08003fa7   Thumb Code     2  stm32fxxx_it.o(.text)
+    DebugMon_Handler                         0x08003fa9   Thumb Code     2  stm32fxxx_it.o(.text)
+    PendSV_Handler                           0x08003fab   Thumb Code     2  stm32fxxx_it.o(.text)
+    TimingDelay_Decrement                    0x08003fad   Thumb Code     2  stm32fxxx_it.o(.text)
+    SysTick_Handler                          0x08003faf   Thumb Code     8  stm32fxxx_it.o(.text)
+    SystemInit                               0x08003fb9   Thumb Code    82  system_stm32f4xx.o(.text)
+    SystemCoreClockUpdate                    0x0800400b   Thumb Code   174  system_stm32f4xx.o(.text)
+    WizFi360_Callback_ConnectedStationsDetected 0x0800411f   Thumb Code     2  wizfi360.o(.text)
+    WizFi360_Callback_FirmwareUpdateError    0x080042db   Thumb Code     2  wizfi360.o(.text)
+    WizFi360_Callback_FirmwareUpdateSuccess  0x080042dd   Thumb Code     2  wizfi360.o(.text)
+    WizFi360_Callback_FirmwareUpdateStatus   0x080042df   Thumb Code     2  wizfi360.o(.text)
+    WizFi360_Callback_PingFinished           0x080042e1   Thumb Code     2  wizfi360.o(.text)
+    WizFi360_Callback_ServerConnectionClosed 0x08004889   Thumb Code     2  wizfi360.o(.text)
+    mem_mem                                  0x0800488d   Thumb Code    52  wizfi360.o(.text)
+    WizFi360_Callback_ServerConnectionActive 0x080048c1   Thumb Code     2  wizfi360.o(.text)
+    WizFi360_Callback_ServerConnectionDataSent 0x080048c5   Thumb Code     2  wizfi360.o(.text)
+    WizFi360_Update                          0x08005567   Thumb Code   776  wizfi360.o(.text)
+    WizFi360_WaitReady                       0x0800586f   Thumb Code    74  wizfi360.o(.text)
+    WizFi360_GetAPIP                         0x0800591f   Thumb Code    60  wizfi360.o(.text)
+    WizFi360_GetAPMAC                        0x0800595b   Thumb Code    42  wizfi360.o(.text)
+    WizFi360_GetSTAMAC                       0x08005985   Thumb Code    42  wizfi360.o(.text)
+    WizFi360_Setdinfo                        0x080059af   Thumb Code   230  wizfi360.o(.text)
+    WizFi360_SetMux                          0x08005a95   Thumb Code    80  wizfi360.o(.text)
+    WizFi360_SetDataMode                     0x08005ae5   Thumb Code    80  wizfi360.o(.text)
+    WizFi360_Init                            0x08005b35   Thumb Code   394  wizfi360.o(.text)
+    WizFi360_DeInit                          0x08005cbf   Thumb Code    20  wizfi360.o(.text)
+    WizFi360_RestoreDefault                  0x08005cd3   Thumb Code    62  wizfi360.o(.text)
+    WizFi360_FirmwareUpdate                  0x08005d11   Thumb Code    46  wizfi360.o(.text)
+    WizFi360_SetUART                         0x08005dc7   Thumb Code    18  wizfi360.o(.text)
+    WizFi360_SetUARTDefault                  0x08005dd9   Thumb Code    18  wizfi360.o(.text)
+    WizFi360_SetSleepMode                    0x08005deb   Thumb Code    64  wizfi360.o(.text)
+    WizFi360_Sleep                           0x08005e2b   Thumb Code    64  wizfi360.o(.text)
+    WizFi360_TimeUpdate                      0x08005e6b   Thumb Code   254  wizfi360.o(.text)
+    WizFi360_WebSocket_WaitReady             0x08005f69   Thumb Code    84  wizfi360.o(.text)
+    WizFi360_IsReady                         0x08005fbd   Thumb Code    40  wizfi360.o(.text)
+    WizFi360_GetAP                           0x08005fe5   Thumb Code    34  wizfi360.o(.text)
+    WizFi360_SetMode                         0x08006007   Thumb Code    76  wizfi360.o(.text)
+    WizFi360_RequestSendData                 0x08006053   Thumb Code   106  wizfi360.o(.text)
+    WizFi360_Web_SendData                    0x080060bd   Thumb Code   126  wizfi360.o(.text)
+    WizFi360_CloseConnection                 0x0800613b   Thumb Code    34  wizfi360.o(.text)
+    WizFi360_CloseAllConnections             0x0800615d   Thumb Code    18  wizfi360.o(.text)
+    WizFi360_AllConectionsClosed             0x0800616f   Thumb Code    54  wizfi360.o(.text)
+    WizFi360_ServerEnable                    0x080061a5   Thumb Code    80  wizfi360.o(.text)
+    WizFi360_ServerDisable                   0x080061f5   Thumb Code    64  wizfi360.o(.text)
+    WizFi360_SetServerTimeout                0x08006235   Thumb Code    80  wizfi360.o(.text)
+    WizFi360_WifiDisconnect                  0x08006285   Thumb Code    18  wizfi360.o(.text)
+    WizFi360_WifiConnect                     0x080062c9   Thumb Code    72  wizfi360.o(.text)
+    WizFi360_WifiConnectDefault              0x08006311   Thumb Code    72  wizfi360.o(.text)
+    WizFi360_WifiGetConnected                0x08006359   Thumb Code   580  wizfi360.o(.text)
+    WizFi360_GetSTAIP                        0x0800659d   Thumb Code    60  wizfi360.o(.text)
+    WizFi360_GetSTAIPBlocking                0x080065d9   Thumb Code    26  wizfi360.o(.text)
+    WizFi360_GetAPIPBlocking                 0x080065f3   Thumb Code    18  wizfi360.o(.text)
+    WizFi360_SetSTAMAC                       0x080066ab   Thumb Code    20  wizfi360.o(.text)
+    WizFi360_SetSTAMACDefault                0x080066bf   Thumb Code    20  wizfi360.o(.text)
+    WizFi360_SetAPMAC                        0x080066d3   Thumb Code    20  wizfi360.o(.text)
+    WizFi360_SetAPMACDefault                 0x080066e7   Thumb Code    20  wizfi360.o(.text)
+    WizFi360_ListWifiStations                0x080066fb   Thumb Code    26  wizfi360.o(.text)
+    WizFi360_SetAP                           0x08006715   Thumb Code   170  wizfi360.o(.text)
+    WizFi360_SetAPDefault                    0x080067bf   Thumb Code   170  wizfi360.o(.text)
+    WizFi360_GetConnectedStations            0x08006869   Thumb Code    48  wizfi360.o(.text)
+    WizFi360_StartClientConnection           0x08006899   Thumb Code   638  wizfi360.o(.text)
+    WizFi360_StartUDPConnection              0x08006b17   Thumb Code   326  wizfi360.o(.text)
+    WizFi360_StartWebConnection              0x08006c5d   Thumb Code   328  wizfi360.o(.text)
+    WizFi360_Callback_PingStarted            0x08006da5   Thumb Code     2  wizfi360.o(.text)
+    WizFi360_Ping                            0x08006da7   Thumb Code   114  wizfi360.o(.text)
+    WizFi360_DataReceived                    0x08006e19   Thumb Code    18  wizfi360.o(.text)
+    WizFi360_Callback_ServerConnectionDataReceived 0x08006e2d   Thumb Code     2  wizfi360.o(.text)
+    WizFi360_Callback_ServerConnectionSendData 0x08006e2f   Thumb Code     8  wizfi360.o(.text)
+    WizFi360_Callback_ServerConnectionDataSentError 0x08006e37   Thumb Code     2  wizfi360.o(.text)
+    WizFi360_Callback_ClientConnectionSendData 0x08006e39   Thumb Code     8  wizfi360.o(.text)
+    ReverseEscapeString                      0x08006e45   Thumb Code    52  wizfi360.o(.text)
+    BUFFER_Init                              0x08006ec5   Thumb Code    68  buffer.o(.text)
+    BUFFER_Free                              0x08006f09   Thumb Code    32  buffer.o(.text)
+    BUFFER_Write                             0x08006f29   Thumb Code    98  buffer.o(.text)
+    BUFFER_Read                              0x08006f8b   Thumb Code    82  buffer.o(.text)
+    BUFFER_GetFree                           0x08006fdd   Thumb Code    42  buffer.o(.text)
+    BUFFER_GetFull                           0x08007007   Thumb Code    40  buffer.o(.text)
+    BUFFER_Reset                             0x0800702f   Thumb Code    14  buffer.o(.text)
+    BUFFER_FindElement                       0x0800703d   Thumb Code    82  buffer.o(.text)
+    BUFFER_Find                              0x0800708f   Thumb Code   162  buffer.o(.text)
+    BUFFER_WriteString                       0x08007131   Thumb Code    26  buffer.o(.text)
+    BUFFER_ReadString                        0x0800714b   Thumb Code   132  buffer.o(.text)
+    BUFFER_CheckElement                      0x080071cf   Thumb Code    64  buffer.o(.text)
+    WizFi360_LL_USARTInit                    0x08007211   Thumb Code    18  wizfi360_ll.o(.text)
+    WizFi360_LL_USARTSend                    0x08007223   Thumb Code    20  wizfi360_ll.o(.text)
+    TM_USART1_ReceiveHandler                 0x08007237   Thumb Code    12  wizfi360_ll.o(.text)
+    __aeabi_memcpy                           0x08007249   Thumb Code    36  memcpya.o(.text)
+    __aeabi_memcpy4                          0x08007249   Thumb Code     0  memcpya.o(.text)
+    __aeabi_memcpy8                          0x08007249   Thumb Code     0  memcpya.o(.text)
+    __aeabi_memset                           0x0800726d   Thumb Code    14  memseta.o(.text)
+    __aeabi_memset4                          0x0800726d   Thumb Code     0  memseta.o(.text)
+    __aeabi_memset8                          0x0800726d   Thumb Code     0  memseta.o(.text)
+    __aeabi_memclr                           0x0800727b   Thumb Code     4  memseta.o(.text)
+    __aeabi_memclr4                          0x0800727b   Thumb Code     0  memseta.o(.text)
+    __aeabi_memclr8                          0x0800727b   Thumb Code     0  memseta.o(.text)
+    _memset$wrapper                          0x0800727f   Thumb Code    18  memseta.o(.text)
+    strstr                                   0x08007291   Thumb Code    36  strstr.o(.text)
+    strncpy                                  0x080072b5   Thumb Code    24  strncpy.o(.text)
+    strlen                                   0x080072cd   Thumb Code    14  strlen.o(.text)
+    strcmp                                   0x080072db   Thumb Code    28  strcmp.o(.text)
+    memcmp                                   0x080072f7   Thumb Code    26  memcmp.o(.text)
+    strcpy                                   0x08007311   Thumb Code    18  strcpy.o(.text)
+    strncmp                                  0x08007323   Thumb Code    30  strncmp.o(.text)
+    strtok                                   0x08007341   Thumb Code    62  strtok.o(.text)
+    __aeabi_uldivmod                         0x08007385   Thumb Code    98  uldiv.o(.text)
+    __scatterload                            0x080073e9   Thumb Code    28  init.o(.text)
+    __scatterload_rt2                        0x080073e9   Thumb Code     0  init.o(.text)
+    __aeabi_llsl                             0x0800740d   Thumb Code    30  llshl.o(.text)
+    _ll_shift_l                              0x0800740d   Thumb Code     0  llshl.o(.text)
+    __aeabi_llsr                             0x0800742b   Thumb Code    32  llushr.o(.text)
+    _ll_ushift_r                             0x0800742b   Thumb Code     0  llushr.o(.text)
+    __0printf$8                              0x0800744d   Thumb Code    22  printf8.o(i.__0printf$8)
+    __1printf$8                              0x0800744d   Thumb Code     0  printf8.o(i.__0printf$8)
+    __2printf                                0x0800744d   Thumb Code     0  printf8.o(i.__0printf$8)
+    __0sprintf$8                             0x0800746d   Thumb Code    34  printf8.o(i.__0sprintf$8)
+    __1sprintf$8                             0x0800746d   Thumb Code     0  printf8.o(i.__0sprintf$8)
+    __2sprintf                               0x0800746d   Thumb Code     0  printf8.o(i.__0sprintf$8)
+    __scatterload_copy                       0x08007495   Thumb Code    14  handlers.o(i.__scatterload_copy)
+    __scatterload_null                       0x080074a3   Thumb Code     2  handlers.o(i.__scatterload_null)
+    __scatterload_zeroinit                   0x080074a5   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    free                                     0x08007921   Thumb Code    76  malloc.o(i.free)
+    malloc                                   0x08007971   Thumb Code    92  malloc.o(i.malloc)
+    APBAHBPrescTable                         0x080079e4   Data          16  stm32f4xx_hal_rcc.o(.constdata)
+    AHBPrescTable                            0x080079f6   Data          16  system_stm32f4xx.o(.constdata)
+    Region$$Table$$Base                      0x08007bac   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08007bcc   Number         0  anon$$obj.o(Region$$Table)
     TM_Time2                                 0x20000004   Data           4  tm_stm32_delay.o(.data)
     TM_Time                                  0x20000008   Data           4  tm_stm32_delay.o(.data)
     TM_USART1                                0x20000010   Data          20  tm_stm32_usart.o(.data)
@@ -1187,9 +1187,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000195
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00007c4c, Max: 0x00080000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00007c40, Max: 0x00080000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00007bd8, Max: 0x00080000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00007bcc, Max: 0x00080000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1216,75 +1216,75 @@ Memory Map of the image
     0x08002fac   0x08002fac   0x00000098   Code   RO          618    .text               tm_stm32_disco.o
     0x08003044   0x08003044   0x00000348   Code   RO          647    .text               tm_stm32_buffer.o
     0x0800338c   0x0800338c   0x00000560   Code   RO          684    .text               tm_stm32_usart.o
-    0x080038ec   0x080038ec   0x000006b4   Code   RO          721    .text               main.o
-    0x08003fa0   0x08003fa0   0x00000022   Code   RO          773    .text               stm32fxxx_it.o
-    0x08003fc2   0x08003fc2   0x00000002   PAD
-    0x08003fc4   0x08003fc4   0x00000120   Code   RO          800    .text               system_stm32f4xx.o
-    0x080040e4   0x080040e4   0x00002dec   Code   RO          831    .text               wizfi360.o
-    0x08006ed0   0x08006ed0   0x0000034a   Code   RO          870    .text               buffer.o
-    0x0800721a   0x0800721a   0x00000002   PAD
-    0x0800721c   0x0800721c   0x00000038   Code   RO          888    .text               wizfi360_ll.o
-    0x08007254   0x08007254   0x00000024   Code   RO          916    .text               mc_w.l(memcpya.o)
-    0x08007278   0x08007278   0x00000024   Code   RO          918    .text               mc_w.l(memseta.o)
-    0x0800729c   0x0800729c   0x00000024   Code   RO          920    .text               mc_w.l(strstr.o)
-    0x080072c0   0x080072c0   0x00000018   Code   RO          922    .text               mc_w.l(strncpy.o)
-    0x080072d8   0x080072d8   0x0000000e   Code   RO          924    .text               mc_w.l(strlen.o)
-    0x080072e6   0x080072e6   0x0000001c   Code   RO          926    .text               mc_w.l(strcmp.o)
-    0x08007302   0x08007302   0x0000001a   Code   RO          928    .text               mc_w.l(memcmp.o)
-    0x0800731c   0x0800731c   0x00000012   Code   RO          930    .text               mc_w.l(strcpy.o)
-    0x0800732e   0x0800732e   0x0000001e   Code   RO          932    .text               mc_w.l(strncmp.o)
-    0x0800734c   0x0800734c   0x00000044   Code   RO          934    .text               mc_w.l(strtok.o)
-    0x08007390   0x08007390   0x00000062   Code   RO         1248    .text               mc_w.l(uldiv.o)
-    0x080073f2   0x080073f2   0x00000002   PAD
-    0x080073f4   0x080073f4   0x00000024   Code   RO         1263    .text               mc_w.l(init.o)
-    0x08007418   0x08007418   0x0000001e   Code   RO         1265    .text               mc_w.l(llshl.o)
-    0x08007436   0x08007436   0x00000020   Code   RO         1267    .text               mc_w.l(llushr.o)
-    0x08007456   0x08007456   0x00000002   PAD
-    0x08007458   0x08007458   0x00000020   Code   RO         1149    i.__0printf$8       mc_w.l(printf8.o)
-    0x08007478   0x08007478   0x00000028   Code   RO         1151    i.__0sprintf$8      mc_w.l(printf8.o)
-    0x080074a0   0x080074a0   0x0000000e   Code   RO         1275    i.__scatterload_copy  mc_w.l(handlers.o)
-    0x080074ae   0x080074ae   0x00000002   Code   RO         1276    i.__scatterload_null  mc_w.l(handlers.o)
-    0x080074b0   0x080074b0   0x0000000e   Code   RO         1277    i.__scatterload_zeroinit  mc_w.l(handlers.o)
-    0x080074be   0x080074be   0x00000002   PAD
-    0x080074c0   0x080074c0   0x00000410   Code   RO         1156    i._printf_core      mc_w.l(printf8.o)
-    0x080078d0   0x080078d0   0x00000024   Code   RO         1157    i._printf_post_padding  mc_w.l(printf8.o)
-    0x080078f4   0x080078f4   0x0000002e   Code   RO         1158    i._printf_pre_padding  mc_w.l(printf8.o)
-    0x08007922   0x08007922   0x0000000a   Code   RO         1160    i._sputc            mc_w.l(printf8.o)
-    0x0800792c   0x0800792c   0x00000050   Code   RO         1203    i.free              mc_w.l(malloc.o)
-    0x0800797c   0x0800797c   0x0000006c   Code   RO         1204    i.malloc            mc_w.l(malloc.o)
-    0x080079e8   0x080079e8   0x00000008   Data   RO          300    .constdata          stm32f4xx_hal_dma.o
-    0x080079f0   0x080079f0   0x00000010   Data   RO          421    .constdata          stm32f4xx_hal_rcc.o
-    0x08007a00   0x08007a00   0x00000002   Data   RO          723    .constdata          main.o
-    0x08007a02   0x08007a02   0x00000010   Data   RO          801    .constdata          system_stm32f4xx.o
-    0x08007a12   0x08007a12   0x00000002   PAD
-    0x08007a14   0x08007a14   0x000001a2   Data   RO          724    .conststring        main.o
-    0x08007bb6   0x08007bb6   0x00000002   PAD
-    0x08007bb8   0x08007bb8   0x00000020   Data   RO         1273    Region$$Table       anon$$obj.o
+    0x080038ec   0x080038ec   0x000006a8   Code   RO          721    .text               main.o
+    0x08003f94   0x08003f94   0x00000022   Code   RO          773    .text               stm32fxxx_it.o
+    0x08003fb6   0x08003fb6   0x00000002   PAD
+    0x08003fb8   0x08003fb8   0x00000120   Code   RO          800    .text               system_stm32f4xx.o
+    0x080040d8   0x080040d8   0x00002dec   Code   RO          831    .text               wizfi360.o
+    0x08006ec4   0x08006ec4   0x0000034a   Code   RO          870    .text               buffer.o
+    0x0800720e   0x0800720e   0x00000002   PAD
+    0x08007210   0x08007210   0x00000038   Code   RO          888    .text               wizfi360_ll.o
+    0x08007248   0x08007248   0x00000024   Code   RO          916    .text               mc_w.l(memcpya.o)
+    0x0800726c   0x0800726c   0x00000024   Code   RO          918    .text               mc_w.l(memseta.o)
+    0x08007290   0x08007290   0x00000024   Code   RO          920    .text               mc_w.l(strstr.o)
+    0x080072b4   0x080072b4   0x00000018   Code   RO          922    .text               mc_w.l(strncpy.o)
+    0x080072cc   0x080072cc   0x0000000e   Code   RO          924    .text               mc_w.l(strlen.o)
+    0x080072da   0x080072da   0x0000001c   Code   RO          926    .text               mc_w.l(strcmp.o)
+    0x080072f6   0x080072f6   0x0000001a   Code   RO          928    .text               mc_w.l(memcmp.o)
+    0x08007310   0x08007310   0x00000012   Code   RO          930    .text               mc_w.l(strcpy.o)
+    0x08007322   0x08007322   0x0000001e   Code   RO          932    .text               mc_w.l(strncmp.o)
+    0x08007340   0x08007340   0x00000044   Code   RO          934    .text               mc_w.l(strtok.o)
+    0x08007384   0x08007384   0x00000062   Code   RO         1248    .text               mc_w.l(uldiv.o)
+    0x080073e6   0x080073e6   0x00000002   PAD
+    0x080073e8   0x080073e8   0x00000024   Code   RO         1263    .text               mc_w.l(init.o)
+    0x0800740c   0x0800740c   0x0000001e   Code   RO         1265    .text               mc_w.l(llshl.o)
+    0x0800742a   0x0800742a   0x00000020   Code   RO         1267    .text               mc_w.l(llushr.o)
+    0x0800744a   0x0800744a   0x00000002   PAD
+    0x0800744c   0x0800744c   0x00000020   Code   RO         1149    i.__0printf$8       mc_w.l(printf8.o)
+    0x0800746c   0x0800746c   0x00000028   Code   RO         1151    i.__0sprintf$8      mc_w.l(printf8.o)
+    0x08007494   0x08007494   0x0000000e   Code   RO         1275    i.__scatterload_copy  mc_w.l(handlers.o)
+    0x080074a2   0x080074a2   0x00000002   Code   RO         1276    i.__scatterload_null  mc_w.l(handlers.o)
+    0x080074a4   0x080074a4   0x0000000e   Code   RO         1277    i.__scatterload_zeroinit  mc_w.l(handlers.o)
+    0x080074b2   0x080074b2   0x00000002   PAD
+    0x080074b4   0x080074b4   0x00000410   Code   RO         1156    i._printf_core      mc_w.l(printf8.o)
+    0x080078c4   0x080078c4   0x00000024   Code   RO         1157    i._printf_post_padding  mc_w.l(printf8.o)
+    0x080078e8   0x080078e8   0x0000002e   Code   RO         1158    i._printf_pre_padding  mc_w.l(printf8.o)
+    0x08007916   0x08007916   0x0000000a   Code   RO         1160    i._sputc            mc_w.l(printf8.o)
+    0x08007920   0x08007920   0x00000050   Code   RO         1203    i.free              mc_w.l(malloc.o)
+    0x08007970   0x08007970   0x0000006c   Code   RO         1204    i.malloc            mc_w.l(malloc.o)
+    0x080079dc   0x080079dc   0x00000008   Data   RO          300    .constdata          stm32f4xx_hal_dma.o
+    0x080079e4   0x080079e4   0x00000010   Data   RO          421    .constdata          stm32f4xx_hal_rcc.o
+    0x080079f4   0x080079f4   0x00000002   Data   RO          723    .constdata          main.o
+    0x080079f6   0x080079f6   0x00000010   Data   RO          801    .constdata          system_stm32f4xx.o
+    0x08007a06   0x08007a06   0x00000002   PAD
+    0x08007a08   0x08007a08   0x000001a2   Data   RO          724    .conststring        main.o
+    0x08007baa   0x08007baa   0x00000002   PAD
+    0x08007bac   0x08007bac   0x00000020   Data   RO         1273    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08007bd8, Size: 0x0000b850, Max: 0x00018000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08007bcc, Size: 0x0000b850, Max: 0x00018000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08007bd8   0x00000004   Data   RW          246    .data               stm32f4xx_hal.o
-    0x20000004   0x08007bdc   0x00000008   Data   RW          583    .data               tm_stm32_delay.o
-    0x2000000c   0x08007be4   0x00000001   Data   RW          619    .data               tm_stm32_disco.o
-    0x2000000d   0x08007be5   0x00000003   PAD
-    0x20000010   0x08007be8   0x0000003c   Data   RW          686    .data               tm_stm32_usart.o
-    0x2000004c   0x08007c24   0x00000004   Data   RW          725    .data               main.o
-    0x20000050   0x08007c28   0x00000004   Data   RW          802    .data               system_stm32f4xx.o
-    0x20000054   0x08007c2c   0x00000010   Data   RW          833    .data               wizfi360.o
-    0x20000064   0x08007c3c   0x00000004   Data   RW          935    .data               mc_w.l(strtok.o)
-    0x20000068   0x08007c40   0x00000004   Data   RW         1245    .data               mc_w.l(stdout.o)
-    0x2000006c   0x08007c44   0x00000004   Data   RW         1250    .data               mc_w.l(mvars.o)
-    0x20000070   0x08007c48   0x00000004   Data   RW         1251    .data               mc_w.l(mvars.o)
+    0x20000000   0x08007bcc   0x00000004   Data   RW          246    .data               stm32f4xx_hal.o
+    0x20000004   0x08007bd0   0x00000008   Data   RW          583    .data               tm_stm32_delay.o
+    0x2000000c   0x08007bd8   0x00000001   Data   RW          619    .data               tm_stm32_disco.o
+    0x2000000d   0x08007bd9   0x00000003   PAD
+    0x20000010   0x08007bdc   0x0000003c   Data   RW          686    .data               tm_stm32_usart.o
+    0x2000004c   0x08007c18   0x00000004   Data   RW          725    .data               main.o
+    0x20000050   0x08007c1c   0x00000004   Data   RW          802    .data               system_stm32f4xx.o
+    0x20000054   0x08007c20   0x00000010   Data   RW          833    .data               wizfi360.o
+    0x20000064   0x08007c30   0x00000004   Data   RW          935    .data               mc_w.l(strtok.o)
+    0x20000068   0x08007c34   0x00000004   Data   RW         1245    .data               mc_w.l(stdout.o)
+    0x2000006c   0x08007c38   0x00000004   Data   RW         1250    .data               mc_w.l(mvars.o)
+    0x20000070   0x08007c3c   0x00000004   Data   RW         1251    .data               mc_w.l(mvars.o)
     0x20000074        -       0x0000001a   Zero   RW          556    .bss                tm_stm32_gpio.o
-    0x2000008e   0x08007c4c   0x00000002   PAD
+    0x2000008e   0x08007c40   0x00000002   PAD
     0x20000090        -       0x00000018   Zero   RW          582    .bss                tm_stm32_delay.o
     0x200000a8        -       0x00000c40   Zero   RW          685    .bss                tm_stm32_usart.o
     0x20000ce8        -       0x00000498   Zero   RW          722    .bss                main.o
     0x20001180        -       0x000021ca   Zero   RW          832    .bss                wizfi360.o
-    0x2000334a   0x08007c4c   0x00000006   PAD
+    0x2000334a   0x08007c40   0x00000006   PAD
     0x20003350        -       0x00004500   Zero   RW            2    HEAP                startup_stm32f401xe.o
     0x20007850        -       0x00004000   Zero   RW            1    STACK               startup_stm32f401xe.o
 
@@ -1297,7 +1297,7 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
        842          0          0          0          0       6158   buffer.o
-      1716        824        420          4       1176      15507   main.o
+      1704        812        420          4       1176      15499   main.o
         36          8        404          0      34048        980   startup_stm32f401xe.o
        412         20          0          4          0       4878   stm32f4xx_hal.o
        796         20          0          0          0      31823   stm32f4xx_hal_cortex.o
@@ -1318,7 +1318,7 @@ Image component sizes
         56          6          0          0          0       1351   wizfi360_ll.o
 
     ----------------------------------------------------------------------
-     28844       3110        900        100      47068     377374   Object Totals
+     28832       3098        900        100      47068     377366   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          4          0          4          3          8          0   (incl. Padding)
 
@@ -1374,15 +1374,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     30804       3212        900        116      47068     373986   Grand Totals
-     30804       3212        900        116      47068     373986   ELF Image Totals
-     30804       3212        900        116          0          0   ROM Totals
+     30792       3200        900        116      47068     373978   Grand Totals
+     30792       3200        900        116      47068     373978   ELF Image Totals
+     30792       3200        900        116          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                31704 (  30.96kB)
+    Total RO  Size (Code + RO Data)                31692 (  30.95kB)
     Total RW  Size (RW Data + ZI Data)             47184 (  46.08kB)
-    Total ROM Size (Code + RO Data + RW Data)      31820 (  31.07kB)
+    Total ROM Size (Code + RO Data + RW Data)      31808 (  31.06kB)
 
 ==============================================================================
 

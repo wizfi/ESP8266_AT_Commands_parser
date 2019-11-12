@@ -84,7 +84,7 @@ int main(void) {
 	WizFi360_WaitReady(&WizFi360);
 	
 	/* Connect to wifi and save settings */
-	#if 1
+	#if 0
 	WizFi360_WifiConnect(&WizFi360, "Teddy_AP", "12345678");
 	#else
 	WizFi360_WifiConnect(&WizFi360, "YourSSID2", "YourPassword2");
@@ -98,62 +98,19 @@ int main(void) {
 	
 	WizFi360_Update(&WizFi360);
 
-	#if 1
-	// taylor PC //34.209.17.11
 	//while (WizFi360_StartClientConnection(&WizFi360, "test", "34.209.17.111", 80, NULL));
 	while (WizFi360_StartClientConnection(&WizFi360, "test", "174.129.224.73", 80, NULL));
-	#else
-	// becky PC
-	while (WizFi360_StartClientConnection(&WizFi360, "becky-pc", "192.168.1.65", 5000, NULL));
-	#endif
+
 	sock = WizFi360.StartConnectionSent;
 //	printf("sock = %d\r\n",sock);
 	WizFi360_WaitReady(&WizFi360);
 //	printf("size = %d , %d\r\n",sizeof(Connection->Data),strlen(Connection->Data));
-#if STM_Basic
-	sprintf(Connection->Data,"GET /echo?.kl=Y HTTP/1.1\r\nHost: demos.kaazing.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Version: 13\r\nSec-WebSocket-Key: znNyGzp7yiDV328CeFWCig==\r\nSec-WebSocket-Protocol: x-kaazing-handshake\r\n\r\n");
-
-	//sprintf(Connection->Data,"GET /echo?.kl=Y HTTP/1.1\r\nHost: demos.kaazing.com\r\nUpgrade:WebSocket\r\n\r\n");
-	//char *temp_str =(WizFi360_Web_SendData(&WizFi360));
-	
-	//Connection->Data = (WizFi360_Web_SendData(&WizFi360));
-//	WizFi360_Web_SendData(&WizFi360);
-	//sprintf(Connection->Data,"%s",WizFi360_Web_SendData(&WizFi360));
-	WizFi360_RequestSendData(&WizFi360, Connection);
-#else
-	//Connection->Data = (WizFi360_Web_SendData(&WizFi360));
-#endif
-	//Connection->Data = temp_str;
-	//Connection->Data[209]=0;
-//	printf("CONNECTION1 = %s\r\n",temp_str);
-//	printf("CONNECTION = %s\r\n",Connection->Data);
-
-///	WizFi360_RequestSendData(&WizFi360, Connection);
-   
-	#if 0
-	// for UDP
-
-	while (WizFi360_StartUDPConnection(&WizFi360, "becky-pc", "192.168.1.65", 5000, NULL));
-	sock = WizFi360.StartConnectionSent;
-	WizFi360_WaitReady(&WizFi360);
-	sprintf(Connection->Data,"abcdefghijklmnopqrstuvwxyz\r\n");
-	WizFi360_RequestSendData(&WizFi360, Connection);
-#endif
-#ifdef STM_Basic
-while (1) {		
-		if( WizFi360.Connection[sock].CallDataReceived == 1){
-			WizFi360.Connection[sock].CallDataReceived =0;
-			printf("?>?>?>\r\n");
-			WizFi360_RequestSendData(&WizFi360, &WizFi360.Connection[sock] );
-		}
-		WizFi360_Update(&WizFi360);
-	}
-
-#else
+	WizFi360.Timeout = 1000;
 	while(1){
 		switch(Web_test){
 			case 0 : 
 				if(cnt == 0){
+
 					//sprintf(Connection->Data,"GET /echo?.kl=Y HTTP/1.1\r\nHost: demos.kaazing.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Version: 13\r\nSec-WebSocket-Key: znNyGzp7yiDV328CeFWCig==\r\nSec-WebSocket-Protocol: x-kaazing-handshake\r\n\r\n");
 					sprintf(Connection->Data,"GET / HTTP/1.1\r\nHost: echo.websocket.org\r\nConnection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Version: 13\r\nSec-WebSocket-Key: znNyGzp7yiDV328CeFWCig==\r\n\r\n");
 					if(Web_Socket(&WizFi360,Connection,"Socket",0)==0)
@@ -175,15 +132,15 @@ while (1) {
 					text[1] = strlen(str);
 					memcpy(Connection->Data,text,sizeof(text));
 					sprintf(Connection->Data+2,str);
+					
 				#ifdef DEBUG_WIZFI360
 						printf("data = %s\r\n",Connection->Data);
 				#endif
-					//sprintf(Connection->Data,"0x81 0x86 /0xce 0xb2 0x4d 0xc9 /0xcf 0xb3 0x4c 0xcb 0xc4 0xb2 0x01 0x01 0x01 0x02 0x0a 0x00");
 					 if(Web_Socket(&WizFi360,Connection,"WizFi360 TEST",0)==0)
 						cnt = 1;
 				}
 				else	
-					if(Web_Socket(&WizFi360,Connection,"WizFi360 TEST",1)==1){
+					if(Web_Socket(&WizFi360,Connection,"WizFi360 TEST",1)==8){
 						cnt = 0;			
 					}
 			
@@ -195,7 +152,7 @@ while (1) {
 	//	WizFi360_Update(&WizFi360);
 
 	}
-#endif
+
 }
 
 WizFi360_Result_t Web_Socket(WizFi360_t* WizFi360,WizFi360_Connection_t* Connection,char *Data,uint8_t SendRecv)
